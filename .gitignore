@@ -1,12 +1,12 @@
 #Android generated
 bin
 gen
-lint.xml
+#lint.xml
 
 #Eclipse
 #.project
 .classpath
-.settings
+#.settings
 .checkstyle
 
 #IntelliJ IDEA
