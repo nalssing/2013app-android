@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:context=".MainActivity" >
+
+    <ImageView
+        android:id="@+id/login_logo_council"
+        android:layout_width="80dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="180dp"
+        android:layout_toLeftOf="@id/login_logo_council"
+        android:src="@drawable/login_logo_council" />
+
+    <ImageView
+        android:id="@+id/login_logo_kaist"
+        android:layout_width="144dp"
+        android:layout_height="76dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/login_logo_council"
+        android:layout_marginLeft="166dp"
+        android:layout_marginRight="13dp"
+        android:src="@drawable/login_logo_kaist" />
+
+    <EditText
+        android:id="@+id/input_id"
+        android:layout_width="214dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/login_logo_kaist"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/login_button"
+        android:background="#ffffff"
+        android:ems="10"
+        android:hint="@string/login_id_label"
+        android:imeOptions="actionNext"
+        android:inputType="textVisiblePassword"
+        android:nextFocusDown="@+id/input_password"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/input_password"
+        android:layout_width="214dp"
+        android:layout_height="32dp"
+        android:layout_alignLeft="@+id/input_id"
+        android:layout_alignRight="@+id/input_id"
+        android:layout_below="@+id/input_id"
+        android:layout_marginTop="10dp"
+        android:background="#ffffff"
+        android:ems="10"
+        android:hint="@string/login_password_label"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:text="" />
+
+    <ImageButton
+        android:id="@+id/login_button"
+        android:layout_width="74dp"
+        android:layout_height="74dp"
+        android:layout_alignRight="@id/login_logo_kaist"
+        android:layout_alignTop="@+id/input_id"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/login_button" />
+
+</RelativeLayout>

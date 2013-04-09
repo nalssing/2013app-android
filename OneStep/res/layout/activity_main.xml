@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/action_bar_bg"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/top_bar" >
+
+        <TextView
+            android:id="@+id/menu_button"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:gravity="center"
+            android:text="icon1"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#30000000" />
+
+        <TextView
+            android:id="@+id/main_header"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="13dp"
+            android:text="MAIN HEADER"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/action_bar_bg"
+        >
+		
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fdfdfd" >
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+    </FrameLayout>
+
+</RelativeLayout>
