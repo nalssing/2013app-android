@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.onestep.MainActivity.MainHandler;
 import com.example.onestep.R;
-import com.example.onestep.noticeBoard.ArticleListInfo;
+import com.example.onestep.article.ArticleListInfo;
 import com.example.onestep.util.NetworkManager;
 import com.example.onestep.util.NetworkReturning;
 import com.example.onestep.util.XmlParser;

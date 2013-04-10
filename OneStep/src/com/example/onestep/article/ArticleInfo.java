@@ -12,7 +12,11 @@ public class ArticleInfo {
 	private String time;
 	private int read_count;
 	private int referer;
-	
+	public enum Type {
+		ARTICLE,
+		REPLY
+	};
+	private Type type;
 	public ArticleInfo() {
 		this.id = 0;
 		this.title = "";
@@ -26,6 +30,7 @@ public class ArticleInfo {
 		this.read_count = 0;
 		this.referer = 0;
 	}
+
 	public ArticleInfo(int id, String title, String writer, String board, String content,
 			String time, int read_count) {
 		super();
@@ -132,5 +137,10 @@ public class ArticleInfo {
 	public void setReferer(int referer) {
 		this.referer = referer;
 	}
-
+	public Type getType() {
+		return type;
+	}
+	public void setType(Type type) {
+		this.type = type;
+	}
 }

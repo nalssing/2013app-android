@@ -1,4 +1,4 @@
-package com.example.onestep.noticeBoard;
+package com.example.onestep.article;
 
 import java.util.ArrayList;
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.onestep.R;
+import com.example.onestep.article.ArticleListFragment;
 import com.example.onestep.article.ArticleReadFragment;
 
 public class NoticeTabMenuFragment extends Fragment {

@@ -12,11 +12,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebView.FindListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.onestep.R;
@@ -24,10 +27,10 @@ import com.example.onestep.util.NetworkManager;
 import com.example.onestep.util.NetworkReturning;
 import com.example.onestep.util.XmlParser;
 
-public class ArticleReadFragment extends Fragment {
+public class ArticleReadFragment extends ListFragment {
 	private View view;
 	private static ArrayList<ArticleInfo> articlelist;
-
+	private static ArticleReadAdapter adapter;
 	private static class SetContentHandler extends Handler
 	{
 		private static String s;
@@ -58,20 +61,11 @@ public class ArticleReadFragment extends Fragment {
 			}
 			else
 			{
-
-				WebView webview = (WebView) me.get().view.findViewById(R.id.article_read_web_viewer);
-				webview.setHorizontalScrollBarEnabled(false);
-				webview.setDrawingCacheEnabled(false);
-				webview.getSettings().setDefaultFontSize(13);
-				webview.loadDataWithBaseURL(null,articlelist.get(0).getContent(),"text/html", "utf-8", null);
-				TextView textview = (TextView) me.get().view.findViewById(R.id.article_read_text_viewer);
-				textview.setVisibility(View.GONE);
-
-				TextView titleview = (TextView) me.get().view.findViewById(R.id.article_read_title);
-				titleview.setText(articlelist.get(0).getTitle() + " | " 
-						+ articlelist.get(0).getWriter() + " | " + articlelist.get(0).getReadCount());
-
-				ListView replyview = (ListView) me.get().view.findViewById(R.id.article_read_reply_list);
+				me.get().view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+				me.get().view.findViewById(android.R.id.list).setVisibility(View.VISIBLE);
+				adapter = new ArticleReadAdapter(me.get().getActivity(), articlelist);
+				me.get().setListAdapter(adapter);
+				
 			}
 		}
 	}
@@ -82,7 +76,6 @@ public class ArticleReadFragment extends Fragment {
 		view = inflater.inflate(R.layout.article_read, container, false);
 		final int articleid = this.getArguments().getInt("articleid");
 		final String boardname = this.getArguments().getString("boardname");
-		
 		final SetContentHandler handler = new SetContentHandler(ArticleReadFragment.this);
 		Thread thread = new Thread(new Runnable()
 		{

@@ -1,9 +1,10 @@
-package com.example.onestep.noticeBoard;
+package com.example.onestep.article;
 
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import com.example.onestep.R;
-import com.example.onestep.article.ArticleReadFragment;
 
 public class ArticleListFragment extends ListFragment {
 	private String boardname;
@@ -98,8 +98,11 @@ public class ArticleListFragment extends ListFragment {
 		args.putString("boardname", boardname);
 		ArticleReadFragment fragment = new ArticleReadFragment();
 		fragment.setArguments(args);
-		
-		getFragmentManager()
+		FragmentManager manager = getFragmentManager();
+		while (manager.getBackStackEntryCount() != 0) {
+			manager.popBackStack();
+		}
+		manager
 		.beginTransaction()
 		.add(R.id.fragment_content,fragment, "readarticle")
 		.addToBackStack(null)

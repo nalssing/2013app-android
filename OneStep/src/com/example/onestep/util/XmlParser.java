@@ -12,7 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.example.onestep.article.ArticleInfo;
-import com.example.onestep.noticeBoard.ArticleListInfo;
+import com.example.onestep.article.ArticleListInfo;
 import com.example.onestep.sitesuggestion.SiteSuggestionInfo;
 
 public class XmlParser {
@@ -112,6 +112,7 @@ public class XmlParser {
 						break;
 				}
 			}
+			rootArticle.setType(ArticleInfo.Type.ARTICLE);
 			list.add(rootArticle);
 
 			ArticleInfo subArticle = new ArticleInfo();
@@ -143,6 +144,7 @@ public class XmlParser {
 				}
 				if(eventType == XmlPullParser.END_TAG && parser.getName().equals("article"))
 				{
+					subArticle.setType(ArticleInfo.Type.REPLY);
 					list.add(subArticle);
 					subArticle = new ArticleInfo();
 				}

@@ -12,10 +12,10 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.example.onestep.article.ArticleListFragment;
 import com.example.onestep.article.ArticleReadFragment;
 import com.example.onestep.home.HomeFragment;
 import com.example.onestep.menu.MenuFragment;
-import com.example.onestep.noticeBoard.ArticleListFragment;
 import com.example.onestep.util.MyCache;
 import com.google.android.gcm.GCMRegistrar;
 import com.slidingmenu.lib.SlidingMenu;

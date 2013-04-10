@@ -1,5 +1,8 @@
 package com.example.onestep;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,13 +38,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context arg0, final String arg1) {
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				NetworkManager.INSTANCE.registerPush(arg1);
 			}
 		}).start();
-		
+
 	}
 
 	@Override
@@ -49,35 +52,47 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// TODO Auto-generated method stub
 
 	}
-    private static void generateNotification(Context context, Intent intent) {
-    	String type = intent.getStringExtra("type");
-    	String board = intent.getStringExtra("board");
-    	String title = intent.getStringExtra("title");
-        int icon = R.drawable.ic_launcher;
-        long when = System.currentTimeMillis();
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        if (type != null)
-        	Log.i("", type);
-        if (true) {
-	        Intent notiIntent  = new Intent(context, LoginActivity.class);
-	        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notiIntent, 0);
-	        Notification notification = 
-	        		builder
-	        		.setSmallIcon(R.drawable.ic_launcher)
-	        		.setTicker("새 알림이 있습니다.")
-	        		.setWhen(System.currentTimeMillis())
-	        		.setContentTitle("새로운 공지글이 등록되었습니다.")
-	        		.setContentText(title)
-	        		.setContentInfo("뭔가 정보")
-	        		.setContentIntent(pendingIntent)
-	        		.setAutoCancel(true)
-	        		.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-	        		.setVibrate(new long[]{100, 50, 150, 50, 200})
-	        		.build();
-	        notificationManager.notify(0, notification);
-        }
-    }
+	private static void generateNotification(Context context, Intent intent) {
+		String type;
+		try {
+			type = URLDecoder.decode(intent.getStringExtra("type"), "UTF-8");
+			String title = URLDecoder.decode(intent.getStringExtra("title"), "UTF-8");
+			NotificationManager notificationManager = (NotificationManager)
+					context.getSystemService(Context.NOTIFICATION_SERVICE);
+			NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+			Intent notiIntent  = new Intent(context, LoginActivity.class);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notiIntent, 0);
+			builder
+			.setSmallIcon(R.drawable.ic_launcher)
+			.setTicker("새 알림이 있습니다.")
+			.setWhen(System.currentTimeMillis())
+			.setContentText(title)
+			.setContentInfo("뭔가 정보")
+			.setContentIntent(pendingIntent)
+			.setAutoCancel(true)
+			.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+			.setVibrate(new long[]{100, 50, 150, 50, 200});
+
+			if (type.equals("portal")) {
+				builder.setContentTitle("새로운 공지글이 등록되었습니다.");
+			}
+			else if (type.equals("article")){
+				builder.setContentTitle("아티클임");
+			}
+			else if (type.equals("reply")) {
+				builder.setContentTitle("댓글임");
+			}
+			else if (type.equals("calendar")) {
+				builder.setContentTitle("달력임");
+			}
+			else {
+				builder.setContentTitle("서버가 미쳐 날뛰고 있습니다.");
+			}
+			notificationManager.notify(0, builder.build());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

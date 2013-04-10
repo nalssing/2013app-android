@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.onestep.R;
+import com.example.onestep.article.ArticleListFragment;
 import com.example.onestep.util.Values;
 
 public class BoardListFragment extends ListFragment {
