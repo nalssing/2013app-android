@@ -72,7 +72,7 @@ public enum NetworkManager {
 		}
 	}
 	public void registerSharedPreference(Context context) {
-		preference = PreferenceManager.getDefaultSharedPreferences(context);
+		preference = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 	public NetworkReturning login(String id, String passwd) {
 		URL url = null;
@@ -106,8 +106,8 @@ public enum NetworkManager {
 
 			returning = new NetworkReturning(https.getResponseCode(), null);
 			if (returning.getStatus() == 200) {
-				preference.edit().putString("username", id);
-				preference.edit().putString("password", passwd);
+				preference.edit().putString("username", id).commit();
+				preference.edit().putString("password", passwd).commit();
 				//preference.edit().putString("deviceID", Secure.ANDROID_ID );
 			}
 			https.disconnect();

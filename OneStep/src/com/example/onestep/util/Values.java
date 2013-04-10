@@ -15,4 +15,5 @@ public enum Values {
 		new BasicNameValuePair("학생동아리소개","student-club"),
 		new BasicNameValuePair("전문연구요원","researcher-on-military-duty"),
 	};
+	public String preferenceKey = "OneStep";
 }

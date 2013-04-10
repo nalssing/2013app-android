@@ -7,11 +7,14 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -145,6 +148,14 @@ public class LoginActivity extends Activity {
 			}
 
 		});
+		SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String username = preference.getString("username", null);
+		String password = preference.getString("password", null);
+		if (username!=null && password!=null) {
+			((TextView)findViewById(R.id.input_id)).setText(username);
+			((TextView)findViewById(R.id.input_password)).setText(password);
+			imageButton.performClick();
+		}
 	}
 	
 	@Override
