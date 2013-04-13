@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.onestep.R;
 import com.example.onestep.article.ArticleListInfo;
 import com.example.onestep.util.NetworkManager;
 import com.example.onestep.util.NetworkReturning;
+import com.example.onestep.util.Values;
 import com.example.onestep.util.XmlParser;
 
 public class HomeFragment extends ListFragment {
@@ -97,16 +99,21 @@ public class HomeFragment extends ListFragment {
 							item.getHit());
 					list.add(article);
 				}
-				getActivity().findViewById(R.id.content_frame).post(new Runnable() {
-					@Override
-					public void run() {
-						getActivity().findViewById(R.id.content_frame).requestLayout();
-						adapter.notifyDataSetChanged();
-					}
-				});
-				Message msg = handler.obtainMessage();
-				msg.arg1 = 1;
-				handler.sendMessage(msg);
+				try {
+					getActivity().findViewById(R.id.content_frame).post(new Runnable() {
+						@Override
+						public void run() {
+							getActivity().findViewById(R.id.content_frame).requestLayout();
+							adapter.notifyDataSetChanged();
+						}
+					});
+					Message msg = handler.obtainMessage();
+					msg.arg1 = 1;
+					handler.sendMessage(msg);
+				}
+				catch (Exception e) {
+					Log.w(Values.INSTANCE.tag, e.toString());
+				}
 			}
 		}).start();
 

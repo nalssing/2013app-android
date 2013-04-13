@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.webkit.WebView.FindListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.onestep.R;
+import com.example.onestep.login.LoginActivity;
 import com.example.onestep.util.NetworkManager;
 import com.example.onestep.util.NetworkReturning;
 import com.example.onestep.util.XmlParser;
@@ -91,9 +93,14 @@ public class ArticleReadFragment extends ListFragment {
 				{
 					if (status == 401) {
 						SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
-						NetworkManager.INSTANCE.login(
+						returning = NetworkManager.INSTANCE.login(
 								preference.getString("username", ""), 
 								preference.getString("password", ""));
+						if (returning.getStatus() != 200) {
+							Intent intent = new Intent(ArticleReadFragment.this.getActivity(), LoginActivity.class);
+							ArticleReadFragment.this.getActivity().startActivity(intent);
+							return;
+						}
 						returning = NetworkManager.INSTANCE.getArticleInfo(articleid, "student-notice");
 						status = returning.getStatus();
 					}

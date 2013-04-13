@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/menu_list_selector" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/menu_tb_padding"
+        android:paddingLeft="@dimen/menu_lr_padding"
+        android:paddingRight="@dimen/menu_lr_padding"
+        android:paddingTop="@dimen/menu_tb_padding" >
+
+        <TextView
+            android:id="@+id/marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_2" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/marker"
+            android:text="TextView"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_2" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_2"
+            android:singleLine="true"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/when"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="TextView"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/text_size_2" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_alignParentBottom="true"
+        android:background="#80999999" />
+
+</RelativeLayout>

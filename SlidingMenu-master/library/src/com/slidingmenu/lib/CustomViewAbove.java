@@ -399,8 +399,10 @@ public class CustomViewAbove extends ViewGroup {
 				if (mOpenedListener != null)
 					mOpenedListener.onOpened();
 			} else {
-				if (mClosedListener != null)
+				if (mClosedListener != null) {
+					System.out.println(String.format("%d %d", x, y));
 					mClosedListener.onClosed();
+				}
 			}
 			return;
 		}

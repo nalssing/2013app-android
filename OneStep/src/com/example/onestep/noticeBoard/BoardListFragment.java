@@ -46,14 +46,15 @@ public class BoardListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		String boardname = ((NameValuePair)l.getItemAtPosition(position)).getValue();
 		getActivity().findViewById(R.id.top_bar_tab3).setSelected(false);
-		goToBoard(boardname);
+		goToBoard(boardname, 0);
 	}
 
-	public void goToBoard(String boardname) {
+	public void goToBoard(String boardname, int articleID) {
 		ArticleListFragment fragment = new ArticleListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("boardname", boardname);
 		bundle.putString("type", "portal");
+		bundle.putInt("articleID", articleID);
 		fragment.setArguments(bundle);
 		fragment.initialize();
 		FragmentManager manager = getFragmentManager();

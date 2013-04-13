@@ -24,37 +24,35 @@
         android:background="#bbbbbb"
         android:text="TextView" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/title_author"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/article_header_height"
+        android:layout_height="wrap_content"
         android:layout_below="@id/devider1"
-        android:orientation="horizontal"
+        android:layout_centerVertical="true"
         android:paddingLeft="@dimen/menu_lr_padding"
-        android:paddingRight="@dimen/menu_lr_padding" >
+        android:paddingRight="@dimen/menu_lr_padding"
+        android:layout_marginTop="@dimen/menu_tb_padding"
+        android:layout_marginBottom="@dimen/menu_tb_padding" >
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:singleLine="true"
             android:text="TextView"
             android:textSize="@dimen/text_size_2" />
 
         <TextView
+            android:layout_marginTop="8dp"
             android:id="@+id/author"
+            android:layout_below="@id/title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:singleLine="true"
+            android:layout_height="wrap_content"
             android:text="TextView"
             android:textColor="#777777"
             android:textSize="@dimen/text_size_2" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/devider2"

@@ -12,13 +12,10 @@ import com.example.onestep.R;
 
 public class MenuFragment extends Fragment {
 	private boolean isAnimationRunning = false;
-	private SparseBooleanArray isExpandedSet;
-	private String selected = "home";
-	private ExpandAnimation ea;
-	private ListView listview;
+	private MenuAdapter ma;
 	public MenuFragment() {
 		super();
-		isExpandedSet = new SparseBooleanArray();
+		new SparseBooleanArray();
 	}
 	public boolean isAnimationRunning() {
 		return isAnimationRunning;
@@ -33,11 +30,15 @@ public class MenuFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		ListView listview = (ListView) inflater.inflate(R.layout.menu_list, null);
-		this.listview = listview;
 		new MenuHolder();
-		MenuAdapter ma = new MenuAdapter(getActivity(), MenuHolder.menus, listview);
+		ma = new MenuAdapter(getActivity(), MenuHolder.menus, listview);
 		listview.setAdapter(ma);
 		return listview;
 	}
-
+	public void setSelected(String selected) {
+		ma.setSelected(selected);
+	}
+	public String getSelected() {
+		return ma.getSelected();
+	}
 }

@@ -6,6 +6,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="login_id_label">Portal ID</string>
     <string name="login_password_label">Password</string>
+    <string name="noti_article">새로운 글이 등록되었습니다.</string>
+    <string name="noti_portal">새 공지가 등록되었습니다.</string>
+    <string name="noti_calendar">일정이 있습니다.</string>
+    <string name="noti_reply">새로운 댓글이 등록되었습니다.</string>
+
     <string-array name="weekdays">
         <item>SUN</item>
         <item>MON</item>
@@ -15,4 +20,5 @@
         <item>FRI</item>
         <item>SAT</item>
     </string-array>
+
 </resources>

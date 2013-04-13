@@ -2,6 +2,9 @@ package com.example.onestep;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.onestep.login.LoginActivity;
+import com.example.onestep.util.DBHelper;
 import com.example.onestep.util.NetworkManager;
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -52,47 +56,81 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// TODO Auto-generated method stub
 
 	}
-	private static void generateNotification(Context context, Intent intent) {
-		String type;
-		try {
-			type = URLDecoder.decode(intent.getStringExtra("type"), "UTF-8");
-			String title = URLDecoder.decode(intent.getStringExtra("title"), "UTF-8");
-			NotificationManager notificationManager = (NotificationManager)
-					context.getSystemService(Context.NOTIFICATION_SERVICE);
-			NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-			Intent notiIntent  = new Intent(context, LoginActivity.class);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notiIntent, 0);
-			builder
-			.setSmallIcon(R.drawable.ic_launcher)
-			.setTicker("새 알림이 있습니다.")
-			.setWhen(System.currentTimeMillis())
-			.setContentText(title)
-			.setContentInfo("뭔가 정보")
-			.setContentIntent(pendingIntent)
-			.setAutoCancel(true)
-			.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-			.setVibrate(new long[]{100, 50, 150, 50, 200});
+	private static void generateNotification(final Context context, final Intent intent) {
+		new Thread(new Runnable() {
 
-			if (type.equals("portal")) {
-				builder.setContentTitle("새로운 공지글이 등록되었습니다.");
+			@Override
+			public void run() {
+				String temp = null;
+				String type = null;
+				String message = null;
+				int id = -1;
+				String board = null;
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeZone(TimeZone.getDefault());
+				calendar.setTimeInMillis(System.currentTimeMillis());
+				SimpleDateFormat formatter = new SimpleDateFormat("a hh:mm");
+				String when = formatter.format(calendar.getTime());
+				try {
+					if ((temp = intent.getStringExtra("type")) != null)
+						type = URLDecoder.decode(temp, "UTF-8");
+					if ((temp = intent.getStringExtra("message")) != null)
+						message = URLDecoder.decode(temp, "UTF-8");
+					if ((temp = intent.getStringExtra("id")) != null)
+						id = Integer.parseInt(temp);
+					if ((temp = intent.getStringExtra("board")) != null)
+						board = URLDecoder.decode(temp, "UTF-8");
+				}
+				catch(Exception e) {
+
+				}
+
+				NotificationManager notificationManager = (NotificationManager)
+						context.getSystemService(Context.NOTIFICATION_SERVICE);
+				NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+				Intent notiIntent  = new Intent(context, MainActivity.class);
+				notiIntent.putExtra("fromNoti", true);
+				PendingIntent pendingIntent = PendingIntent.getActivity(context, 6, notiIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+				
+				builder
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setTicker("새 알림이 있습니다.")
+				.setWhen(System.currentTimeMillis())
+				.setContentText(message)
+				.setContentIntent(pendingIntent)
+				.setAutoCancel(true)
+				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+				.setVibrate(new long[]{100, 50, 150, 50, 200});
+				
+				DBHelper helper = new DBHelper(context);
+				helper.open();
+				if (type.equals("portal")) {
+					String title = context.getResources().getString(R.string.noti_portal);
+					helper.insertColumn(title, message, type, board, id, when);
+					builder.setContentTitle(title);
+				}
+				else if (type.equals("article")){
+					String title = context.getResources().getString(R.string.noti_article);
+					helper.insertColumn(title, message, type, board, id, when);
+					builder.setContentTitle(title);
+				}
+				else if (type.equals("reply")) {
+					String title = context.getResources().getString(R.string.noti_reply);
+					helper.insertColumn(title, message, type, board, id, when);
+					builder.setContentTitle(title);
+				}
+				else if (type.equals("calendar")) {
+					String title = context.getResources().getString(R.string.noti_calendar);
+					helper.insertColumn(title, "아직달력지원 ㄴㄴ해", type, null, -1, when);
+					builder.setContentTitle(title);
+				}
+				else {
+					builder.setContentTitle("서버가 미쳐 날뛰고 있습니다.");
+				}
+				helper.close();
+				notificationManager.notify(0, builder.build());
 			}
-			else if (type.equals("article")){
-				builder.setContentTitle("아티클임");
-			}
-			else if (type.equals("reply")) {
-				builder.setContentTitle("댓글임");
-			}
-			else if (type.equals("calendar")) {
-				builder.setContentTitle("달력임");
-			}
-			else {
-				builder.setContentTitle("서버가 미쳐 날뛰고 있습니다.");
-			}
-			notificationManager.notify(0, builder.build());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		}).start();
+
 	}
-
 }

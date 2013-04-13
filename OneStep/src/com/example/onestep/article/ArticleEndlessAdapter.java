@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.commonsware.cwac.endless.EndlessAdapter;
 import com.example.onestep.R;
+import com.example.onestep.login.LoginActivity;
 import com.example.onestep.util.NetworkManager;
 import com.example.onestep.util.NetworkReturning;
 import com.example.onestep.util.XmlParser;
@@ -93,9 +95,14 @@ public class ArticleEndlessAdapter extends EndlessAdapter{
 		else {
 			if (status == 401) {
 				SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
-				NetworkManager.INSTANCE.login(
+				returning = NetworkManager.INSTANCE.login(
 						preference.getString("username", ""), 
 						preference.getString("password", ""));
+				if (returning.getStatus() != 200) {
+					Intent intent = new Intent(context, LoginActivity.class);
+					context.startActivity(intent);
+					return false;
+				}
 				returning = NetworkManager.INSTANCE.getArticleList(boardName, from, count, type);
 				status = returning.getStatus();
 			}

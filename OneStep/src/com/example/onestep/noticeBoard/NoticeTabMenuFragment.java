@@ -20,21 +20,6 @@ public class NoticeTabMenuFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		Bundle bundle;
-//		tab1 = new ArticleListFragment();
-//		bundle = new Bundle();
-//		bundle.putString("boardname", "student-notice");
-//		bundle.putString("type", "portal");
-//		tab1.setArguments(bundle);
-//		tab1.initialize();
-//		tab2 = new ArticleListFragment();
-//		bundle = new Bundle();
-//		bundle.putString("boardname", "gsc-usc-notice");
-//		bundle.putString("type", "portal");
-//		tab2.setArguments(bundle);
-//		tab2.initialize();
-//		tab3 = new BoardListFragment();
-//		selectedPosition = -1;
 		this.bundle = getArguments();
 	}
 
@@ -54,7 +39,7 @@ public class NoticeTabMenuFragment extends Fragment {
 					getFragmentManager().beginTransaction().remove(article).commit();
 					getFragmentManager().popBackStack();
 				}
-				goToTab(1, null);
+				goToTab(1, null, 0);
 			}
 		});
 
@@ -68,7 +53,7 @@ public class NoticeTabMenuFragment extends Fragment {
 					getFragmentManager().beginTransaction().remove(article).commit();
 					getFragmentManager().popBackStack();
 				}
-				goToTab(2, null);
+				goToTab(2, null, 0);
 			}
 		});
 
@@ -82,7 +67,7 @@ public class NoticeTabMenuFragment extends Fragment {
 					getFragmentManager().beginTransaction().remove(article).commit();
 					getFragmentManager().popBackStack();
 				}
-				goToTab(3, null);
+				goToTab(3, null, 0);
 			}
 		});
 		if (savedInstanceState == null)
@@ -94,10 +79,11 @@ public class NoticeTabMenuFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
-		goToTab(bundle.getInt("position"), bundle.getString("boardname"));
+		goToTab(bundle.getInt("position"), bundle.getString("boardname"), bundle.getInt("articleID"));
 	}
 
-	public void goToTab(int position, String boardname) {
+	public void goToTab(int position, String boardname, int articleID) {
+		Log.i("","gototab");
 		View selectedTab;
 		View view;
 		switch(selectedPosition) {
@@ -117,6 +103,7 @@ public class NoticeTabMenuFragment extends Fragment {
 			bundle = new Bundle();
 			bundle.putString("boardname", "student-notice");
 			bundle.putString("type", "portal");
+			bundle.putInt("articleID", articleID);
 			tab1.setArguments(bundle);
 			tab1.initialize();
 			view = getView().findViewById(R.id.top_bar_tab1);
@@ -134,6 +121,7 @@ public class NoticeTabMenuFragment extends Fragment {
 			bundle = new Bundle();
 			bundle.putString("boardname", "gsc-usc-notice");
 			bundle.putString("type", "portal");
+			bundle.putInt("articleID", articleID);
 			tab2.setArguments(bundle);
 			tab2.initialize();
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -151,7 +139,7 @@ public class NoticeTabMenuFragment extends Fragment {
 			ft.replace(R.id.fragment_content, tab3);
 			ft.commit();
 			if (boardname != null) {
-				tab3.goToBoard(boardname);
+				tab3.goToBoard(boardname, articleID);
 				view.setSelected(false);
 			}
 		}

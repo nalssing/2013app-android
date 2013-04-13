@@ -1,5 +1,7 @@
 package com.example.onestep.login;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
@@ -7,10 +9,11 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -18,8 +21,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.example.onestep.MainActivity;
 import com.example.onestep.R;
 import com.example.onestep.util.NetworkManager;
 import com.example.onestep.util.NetworkReturning;
+import com.example.onestep.util.Values;
 
 public class LoginActivity extends Activity {
 	
@@ -85,6 +89,16 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		try {
+		    File filename = new File(Environment.getExternalStorageDirectory()+"/onestep_log.txt"); 
+		    filename.createNewFile(); 
+		    String cmd = "logcat -d -f "+filename.getAbsolutePath() + " AndroidRuntime:W com.example.onestep:W *:S";
+		    Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+
 		NetworkManager.INSTANCE.registerSharedPreference(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login);

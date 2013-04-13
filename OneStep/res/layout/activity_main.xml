@@ -24,13 +24,30 @@
 
         <TextView
             android:id="@+id/main_header"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:paddingLeft="13dp"
             android:text="MAIN HEADER"
             android:textColor="#ffffff"
             android:textSize="20sp" />
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#30000000" />
+        <TextView 
+            android:id="@+id/noti_count"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_margin="7dp"
+            android:background="#aaff4751"
+            android:gravity="center"
+            android:text="0"
+            android:textSize="@dimen/text_size_4"/>
     </LinearLayout>
 
     <FrameLayout

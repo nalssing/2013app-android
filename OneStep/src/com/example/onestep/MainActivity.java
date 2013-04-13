@@ -16,14 +16,18 @@ import com.example.onestep.article.ArticleListFragment;
 import com.example.onestep.article.ArticleReadFragment;
 import com.example.onestep.home.HomeFragment;
 import com.example.onestep.menu.MenuFragment;
+import com.example.onestep.noti.NotiFragment;
 import com.example.onestep.util.MyCache;
 import com.google.android.gcm.GCMRegistrar;
 import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
-public class MainActivity extends SlidingFragmentActivity
+public class MainActivity extends FragmentActivity
 implements ArticleListFragment.onArticleListItemSelectedListener
 {
+	private SlidingMenu sm;
 	public static class MainHandler extends Handler {
 		private FragmentActivity context;
 		public MainHandler(FragmentActivity fragmentActivity) {
@@ -38,25 +42,25 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 				((MainActivity)context).screenOn();
 			}
 		}
-		
+
 	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        // Make sure the device has the proper dependencies.
-        GCMRegistrar.checkDevice(this);
-        // Make sure the manifest was properly set - comment out this line
-        // while developing the app, then uncomment it when it's ready.
-        GCMRegistrar.checkManifest(this);
-        final String regId = GCMRegistrar.getRegistrationId(this);
-        if (regId.equals("")) {
-            // Automatically registers application on startup.
-            GCMRegistrar.register(this, "556333818024");
-        }
-        else {
-        	Log.i("", "aleady registered");
-        }
-        
+		// Make sure the device has the proper dependencies.
+		GCMRegistrar.checkDevice(this);
+		// Make sure the manifest was properly set - comment out this line
+		// while developing the app, then uncomment it when it's ready.
+		GCMRegistrar.checkManifest(this);
+		final String regId = GCMRegistrar.getRegistrationId(this);
+		if (regId.equals("")) {
+			// Automatically registers application on startup.
+			GCMRegistrar.register(this, "556333818024");
+		}
+		else {
+			Log.i("", "aleady registered");
+		}
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
@@ -68,29 +72,65 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 		.beginTransaction()
 		.replace(R.id.content_frame,fragment)
 		.commit();
-		
-		setBehindContentView(R.layout.menu_frame);
+
+		//setBehindContentView(R.layout.menu_frame);
+
+
+		sm = new SlidingMenu(this);
+		sm.setMenu(R.layout.menu_frame);
+		sm.setSecondaryMenu(R.layout.noti_frame);
+		sm.setMode(SlidingMenu.LEFT_RIGHT);
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
+		sm.setSecondaryShadowDrawable(R.drawable.shadow_secondary);
+		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		sm.setFadeDegree(0.35f);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		sm.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+		if (getIntent().getBooleanExtra("fromNoti", false))
+			sm.showSecondaryMenu();
+		sm.setOnClosedListener(new OnClosedListener() {
+
+			@Override
+			public void onClosed() {
+				if (true) {
+					((NotiFragment)getSupportFragmentManager().findFragmentById(R.id.noti_frame)).refresh();
+				}
+			}
+		});
 		getSupportFragmentManager()
 		.beginTransaction()
 		.replace(R.id.menu_frame, new MenuFragment())
 		.commit();
-		
-		SlidingMenu sm = getSlidingMenu();
-		sm.setShadowWidthRes(R.dimen.shadow_width);
-		sm.setShadowDrawable(R.drawable.shadow);
-		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-		sm.setFadeDegree(0.35f);
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		
+
+
+
+		getSupportFragmentManager()
+		.beginTransaction()
+		.replace(R.id.noti_frame, new NotiFragment())
+		.commit();
 		View menuCallButton = findViewById(R.id.menu_button);
 		menuCallButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				toggle();
+				sm.toggle();
 			}
 		});
-		
+		View notiCallButton = findViewById(R.id.noti_count);
+		notiCallButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (sm.isSecondaryMenuShowing()) {
+					sm.toggle();
+				}
+				else {
+					sm.showSecondaryMenu();
+				}
+			}
+		});
+
 	}
 
 	@Override
@@ -99,7 +139,7 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	public void setTitle(String title) {
 		((TextView)findViewById(R.id.main_header)).setText(title);
 	}
@@ -112,7 +152,7 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 		findViewById(R.id.content_frame).setVisibility(View.INVISIBLE);
 	}
 
-	
+
 	@Override
 	public void onArticleListItemSelected(int articleid) {
 		// TODO Auto-generated method stub
@@ -130,5 +170,8 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 			transaction.addToBackStack(null);
 			transaction.commit();
 		}
+	}
+	public SlidingMenu getSlidingMenu() {
+		return sm;
 	}
 }

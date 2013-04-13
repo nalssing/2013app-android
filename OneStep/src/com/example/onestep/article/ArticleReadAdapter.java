@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.onestep.R;
+import com.example.onestep.util.Values;
 
 public class ArticleReadAdapter extends ArrayAdapter<ArticleInfo> {
 	private LayoutInflater inflater;
@@ -48,9 +49,9 @@ public class ArticleReadAdapter extends ArrayAdapter<ArticleInfo> {
 		}
 		ViewHolder holder = (ViewHolder)convertView.getTag();
 		if (type == 0) {
-			holder.header.setText(info.getBoard());
+			holder.header.setText(Values.INSTANCE.portalBoardsMap.get(info.getBoard()));
 			holder.title.setText(info.getTitle());
-			holder.author.setText("|".concat(info.getWriter()).concat("|"));
+			holder.author.setText(info.getWriter().concat(" | ").concat(info.getTime()));
 			holder.content.setText(Html.fromHtml(info.getContent()));
 		}
 		else {

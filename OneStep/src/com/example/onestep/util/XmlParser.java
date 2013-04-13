@@ -104,8 +104,14 @@ public class XmlParser {
 						rootArticle.setVoteUp(Integer.parseInt(parser.nextText()));
 					if(parser.getName().equals("vote_down"))
 						rootArticle.setVoteDown(Integer.parseInt(parser.nextText()));
-					if(parser.getName().equals("time"))
-						rootArticle.setTime(parser.nextText());
+					if(parser.getName().equals("time")) {
+						String timeStamp = parser.nextText();
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTimeZone(TimeZone.getDefault());
+						calendar.setTimeInMillis(Long.parseLong(timeStamp));
+						SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+						rootArticle.setTime(formatter.format(calendar.getTime()));
+					}
 					if(parser.getName().equals("read_count"))
 						rootArticle.setReadCount(Integer.parseInt(parser.nextText()));
 					if(parser.getName().equals("sub_articles"))
@@ -135,8 +141,14 @@ public class XmlParser {
 						subArticle.setVoteUp(Integer.parseInt(parser.nextText()));
 					if(parser.getName().equals("vote_down"))
 						subArticle.setVoteDown(Integer.parseInt(parser.nextText()));
-					if(parser.getName().equals("time"))
-						subArticle.setTime(parser.nextText());
+					if(parser.getName().equals("time")) {
+						String timeStamp = parser.nextText();
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTimeZone(TimeZone.getDefault());
+						calendar.setTimeInMillis(Long.parseLong(timeStamp));
+						SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+						subArticle.setTime(formatter.format(calendar.getTime()));
+					}
 					if(parser.getName().equals("read_count"))
 						subArticle.setReadCount(Integer.parseInt(parser.nextText()));
 					if(parser.getName().equals("referer"))

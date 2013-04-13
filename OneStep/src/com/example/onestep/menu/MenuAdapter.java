@@ -119,20 +119,23 @@ public class MenuAdapter extends ArrayAdapter<MyMenu> implements OnItemClickList
 			ListView listview = menu.getListview();
 			int menuHeight = context.getResources().getDimensionPixelSize(R.dimen.menu_height);
 			if (menu.isExpanded()) {
-				listview.getLayoutParams().height = menuHeight;
+				ExpandAnimation ea = new ExpandAnimation(context, listview, 500, menuHeight);
+				listview.startAnimation(ea);
 				menu.setTitle("더 보기");
 				((TextView)view.findViewById(R.id.textView1)).setText("더 보기");
 				listview.requestLayout();
 				listview.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 				menu.setExpanded(false);
 				
+				
 			}
 			else {
-				listview.getLayoutParams().height = menuHeight * listview.getAdapter().getCount();
 				menu.setTitle("접기");
 				((TextView)view.findViewById(R.id.textView1)).setText("접기");
 				listview.requestLayout();
 				menu.setExpanded(true);
+				ExpandAnimation ea = new ExpandAnimation(context, listview, 500, menuHeight * listview.getAdapter().getCount());
+				listview.startAnimation(ea);
 			}
 		}
 		else {
@@ -167,13 +170,13 @@ public class MenuAdapter extends ArrayAdapter<MyMenu> implements OnItemClickList
 					}
 					if (selected.equals("notice") && fragment != null) {
 						if (tag.equals("notice/student")) {
-							fragment.goToTab(1, null);
+							fragment.goToTab(1, null, 0);
 						}
 						else if (tag.equals("notice/usc")) {
-							fragment.goToTab(2, null);
+							fragment.goToTab(2, null, 0);
 						}
 						else {
-							fragment.goToTab(3, tag.split("/")[1]);
+							fragment.goToTab(3, tag.split("/")[1], 0);
 						}
 					}
 					else {
@@ -218,6 +221,14 @@ public class MenuAdapter extends ArrayAdapter<MyMenu> implements OnItemClickList
 
 			mainActivity.getSlidingMenu().toggle();
 		}
+	}
+
+	public String getSelected() {
+		return selected;
+	}
+
+	public void setSelected(String selected) {
+		this.selected = selected;
 	}
 
 }
