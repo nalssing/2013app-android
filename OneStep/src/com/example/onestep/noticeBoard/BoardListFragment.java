@@ -19,11 +19,13 @@ import com.example.onestep.article.ArticleListFragment;
 import com.example.onestep.util.Values;
 
 public class BoardListFragment extends ListFragment {
+	private ArticleListFragment articleFragment;
 	private ArrayAdapter<NameValuePair> adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		Log.i("", "make view");
 		View view = inflater.inflate(R.layout.article_list, null);
 		if (adapter == null) {
@@ -50,17 +52,18 @@ public class BoardListFragment extends ListFragment {
 	}
 
 	public void goToBoard(String boardname, int articleID) {
-		ArticleListFragment fragment = new ArticleListFragment();
+		if (articleFragment == null)
+			articleFragment = new ArticleListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("boardname", boardname);
 		bundle.putString("type", "portal");
 		bundle.putInt("articleID", articleID);
-		fragment.setArguments(bundle);
-		fragment.initialize();
+		articleFragment.setArguments(bundle);
+		articleFragment.initialize();
 		FragmentManager manager = getFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction
-		.replace(R.id.fragment_content, fragment)
+		.replace(R.id.fragment_content, articleFragment)
 		.commit();
 	}
 	

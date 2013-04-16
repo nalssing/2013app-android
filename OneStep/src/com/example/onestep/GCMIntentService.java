@@ -102,35 +102,34 @@ public class GCMIntentService extends GCMBaseIntentService {
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 				.setVibrate(new long[]{100, 50, 150, 50, 200});
 				
-				DBHelper helper = new DBHelper(context);
-				helper.open();
+				DBHelper.INSTANCE.initialize(context);
 				if (type.equals("portal")) {
 					String title = context.getResources().getString(R.string.noti_portal);
-					helper.insertColumn(title, message, type, board, id, when);
+					DBHelper.INSTANCE.insertColumn(title, message, type, board, id, when);
 					builder.setContentTitle(title);
 				}
 				else if (type.equals("article")){
 					String title = context.getResources().getString(R.string.noti_article);
-					helper.insertColumn(title, message, type, board, id, when);
+					DBHelper.INSTANCE.insertColumn(title, message, type, board, id, when);
 					builder.setContentTitle(title);
 				}
 				else if (type.equals("reply")) {
 					String title = context.getResources().getString(R.string.noti_reply);
-					helper.insertColumn(title, message, type, board, id, when);
+					DBHelper.INSTANCE.insertColumn(title, message, type, board, id, when);
 					builder.setContentTitle(title);
 				}
 				else if (type.equals("calendar")) {
 					String title = context.getResources().getString(R.string.noti_calendar);
-					helper.insertColumn(title, "아직달력지원 ㄴㄴ해", type, null, -1, when);
+					DBHelper.INSTANCE.insertColumn(title, "아직달력지원 ㄴㄴ해", type, null, -1, when);
 					builder.setContentTitle(title);
 				}
 				else {
 					builder.setContentTitle("서버가 미쳐 날뛰고 있습니다.");
 				}
-				helper.close();
 				notificationManager.notify(0, builder.build());
 			}
 		}).start();
 
 	}
+	
 }

@@ -17,6 +17,9 @@ import com.example.onestep.article.ArticleReadFragment;
 public class NoticeTabMenuFragment extends Fragment {
 	private int selectedPosition;
 	private Bundle bundle;
+	private ArticleListFragment tab1;
+	private ArticleListFragment tab2;
+	private BoardListFragment tab3;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,8 +73,6 @@ public class NoticeTabMenuFragment extends Fragment {
 				goToTab(3, null, 0);
 			}
 		});
-		if (savedInstanceState == null)
-			Log.i("n","null");
 		return v;
 	}
 
@@ -83,7 +84,6 @@ public class NoticeTabMenuFragment extends Fragment {
 	}
 
 	public void goToTab(int position, String boardname, int articleID) {
-		Log.i("","gototab");
 		View selectedTab;
 		View view;
 		switch(selectedPosition) {
@@ -99,7 +99,8 @@ public class NoticeTabMenuFragment extends Fragment {
 		if (position == 1) {
 			selectedPosition = position;
 			selectedTab.setSelected(false);
-			ArticleListFragment tab1 = new ArticleListFragment();
+			if (tab1 == null)
+				tab1 = new ArticleListFragment();
 			bundle = new Bundle();
 			bundle.putString("boardname", "student-notice");
 			bundle.putString("type", "portal");
@@ -117,7 +118,8 @@ public class NoticeTabMenuFragment extends Fragment {
 			selectedTab.setSelected(false);
 			view = getView().findViewById(R.id.top_bar_tab2);
 			view.setSelected(true);
-			ArticleListFragment tab2 = new ArticleListFragment();
+			if (tab2 == null)
+				tab2 = new ArticleListFragment();
 			bundle = new Bundle();
 			bundle.putString("boardname", "gsc-usc-notice");
 			bundle.putString("type", "portal");
@@ -133,8 +135,8 @@ public class NoticeTabMenuFragment extends Fragment {
 			selectedTab.setSelected(false);
 			view = getView().findViewById(R.id.top_bar_tab3);
 			view.setSelected(true);
-			Log.i("", "here");
-			BoardListFragment tab3 = new BoardListFragment();
+			if (tab3 == null)
+				tab3 = new BoardListFragment();
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.replace(R.id.fragment_content, tab3);
 			ft.commit();

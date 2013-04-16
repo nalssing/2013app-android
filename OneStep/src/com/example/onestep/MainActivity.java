@@ -1,19 +1,18 @@
 package com.example.onestep;
 
+import android.R.menu;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.example.onestep.article.ArticleListFragment;
-import com.example.onestep.article.ArticleReadFragment;
 import com.example.onestep.home.HomeFragment;
 import com.example.onestep.menu.MenuFragment;
 import com.example.onestep.noti.NotiFragment;
@@ -21,13 +20,14 @@ import com.example.onestep.util.MyCache;
 import com.google.android.gcm.GCMRegistrar;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
-import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
-import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class MainActivity extends FragmentActivity
-implements ArticleListFragment.onArticleListItemSelectedListener
 {
 	private SlidingMenu sm;
+	private HomeFragment homeFragment;
+	private NotiFragment notiFragment;
+	private MenuFragment menuFragment;
+	
 	public static class MainHandler extends Handler {
 		private FragmentActivity context;
 		public MainHandler(FragmentActivity fragmentActivity) {
@@ -47,6 +47,7 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i("activity", "onCreate");
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
 		// Make sure the manifest was properly set - comment out this line
@@ -66,11 +67,12 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 		findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
 		findViewById(R.id.content_frame).setVisibility(View.INVISIBLE);
 		setTitle("Ȩ");
-		HomeFragment fragment = new HomeFragment();
-		MyCache.INSTANCE.getCache().put("home", fragment);
+		if (homeFragment == null)
+			homeFragment = new HomeFragment();
+		MyCache.INSTANCE.getCache().put("home", homeFragment);
 		getSupportFragmentManager()
 		.beginTransaction()
-		.replace(R.id.content_frame,fragment)
+		.replace(R.id.content_frame, homeFragment)
 		.commit();
 
 		//setBehindContentView(R.layout.menu_frame);
@@ -98,20 +100,23 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 				}
 			}
 		});
+		if (menuFragment == null) {
+			menuFragment = new MenuFragment();
+		}
 		getSupportFragmentManager()
 		.beginTransaction()
-		.replace(R.id.menu_frame, new MenuFragment())
+		.replace(R.id.menu_frame,menuFragment)
 		.commit();
-
-
-
+		
+		if (notiFragment == null) {
+			notiFragment = new NotiFragment();
+		}
 		getSupportFragmentManager()
 		.beginTransaction()
-		.replace(R.id.noti_frame, new NotiFragment())
+		.replace(R.id.noti_frame, notiFragment)
 		.commit();
 		View menuCallButton = findViewById(R.id.menu_button);
 		menuCallButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				sm.toggle();
@@ -133,13 +138,6 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
 	public void setTitle(String title) {
 		((TextView)findViewById(R.id.main_header)).setText(title);
 	}
@@ -152,26 +150,18 @@ implements ArticleListFragment.onArticleListItemSelectedListener
 		findViewById(R.id.content_frame).setVisibility(View.INVISIBLE);
 	}
 
-
-	@Override
-	public void onArticleListItemSelected(int articleid) {
-		// TODO Auto-generated method stub
-		ArticleReadFragment articleview = (ArticleReadFragment) getSupportFragmentManager().findFragmentByTag("readarticle");
-		if (articleview != null) {
-			articleview.updateArticleView(articleid);
-		} else {
-			ArticleReadFragment newFragment = new ArticleReadFragment();
-			Bundle args = new Bundle();
-			args.putInt("articleid", articleid);
-			newFragment.setArguments(args);
-
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.add(R.id.fragment_content, newFragment,"readarticle");
-			transaction.addToBackStack(null);
-			transaction.commit();
-		}
-	}
 	public SlidingMenu getSlidingMenu() {
 		return sm;
 	}
+
+	@Override
+	protected void onStop() {
+		Log.i("activity", "onStop");
+		super.onStop();
+		finish();
+	}
+
+	
+
+
 }

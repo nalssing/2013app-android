@@ -24,16 +24,6 @@ public class ArticleListFragment extends ListFragment {
 		public void onArticleListItemSelected(int articleid);
 	}
 	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-        try {
-            mCallback = (onArticleListItemSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-	}
 		
 	
 	public ArticleListFragment() {
@@ -56,16 +46,14 @@ public class ArticleListFragment extends ListFragment {
 			articleID = -1;
 		Log.i("articleID", String.valueOf(articleID));
 	}
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		if (articleID != -1) {
-			Log.i("", "gotoarticle articleid");
-			goToArticle(articleID);
-			articleID = -1;
-		}
-	}
 
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +65,6 @@ public class ArticleListFragment extends ListFragment {
 		View view = inflater.inflate(R.layout.article_list, null);
 		if (adapter == null){
 			ArrayList<ArticleListInfo> wrapperList = null;
-				wrapperList = getActivity().getIntent().getParcelableArrayListExtra(boardname + "wrapperList");
 			if (wrapperList == null)
 				wrapperList = new ArrayList<ArticleListInfo>();
 			adapter = new ArticleEndlessAdapter(getActivity(), wrapperList, boardname, type);
@@ -88,22 +75,6 @@ public class ArticleListFragment extends ListFragment {
 
 
 	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		getActivity().getIntent().putExtra(boardname + "wrapperList", adapter.wrapperList);
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		outState.putParcelableArrayList(boardname + "wrapperList", adapter.wrapperList);
-		outState.putInt(boardname + "size", adapter.wrapperList.size());
-
-	}
-
-	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		ArticleListInfo info = (ArticleListInfo) l.getItemAtPosition(position);
 		goToArticle(info.getId());
@@ -111,6 +82,7 @@ public class ArticleListFragment extends ListFragment {
 	}
 	
 	public void goToArticle(int articleID) {
+		Log.i("article", "gotoarticle");
 		Bundle args = new Bundle();
 		args.putInt("articleid", articleID);
 		args.putString("boardname", boardname);
@@ -124,8 +96,19 @@ public class ArticleListFragment extends ListFragment {
 		Log.i("","loop3");
 		manager
 		.beginTransaction()
-		.add(R.id.fragment_content,fragment, "readarticle")
+		.add(R.id.fragment_content, fragment, "readarticle")
 		.addToBackStack(null)
 		.commit();
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if (articleID != -1) {
+			Log.i("", "gotoarticle articleid");
+			goToArticle(articleID);
+			articleID = -1;
+		}
 	}
 }

@@ -2,6 +2,7 @@ package com.example.onestep.util;
 
 import java.util.ArrayList;
 
+import android.app.Application;
 import android.app.ApplicationErrorReport.CrashInfo;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,13 +16,11 @@ import android.util.Log;
 
 import com.example.onestep.noti.NotiItem;
 
-public class DBHelper  {
-
+public enum DBHelper  {
+	INSTANCE;
 	private static final String DATABASE_NAME = "onestep.db";
-	private static final int DATABASE_VERSION = 8;
-	public static SQLiteDatabase db;
+	private static final int DATABASE_VERSION = 9;
 	private DBOpenHelper openHelper;
-	private Context context;
 	public static final class CreateDB implements BaseColumns{
 		public static final String TITLE = "title";
 		public static final String MESSAGE = "message";
@@ -63,21 +62,15 @@ public class DBHelper  {
 		}
 	}
 
-	public DBHelper(Context context){
-		this.context = context;
+	DBHelper(){
 	}
-
-	public DBHelper open() throws SQLException{
-		openHelper = new DBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
-		db = openHelper.getWritableDatabase();
-		return this;
-	}
-
-	public void close(){
-		db.close();
+	public void initialize(Context context) {
+		if (openHelper == null)
+			openHelper = new DBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	
-	public void insertColumn(String title, String message, String type, String boardName, int articleID, String time) {
+	synchronized public void insertColumn(String title, String message, String type, String boardName, int articleID, String time) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(CreateDB.TITLE, title);
 		values.put(CreateDB.MESSAGE, message);
@@ -94,9 +87,12 @@ public class DBHelper  {
 			result.moveToFirst();
 			db.delete(table, "_id=?", new String[]{result.getString(0)});
 		}
+		result.close();
+		db.close();
 	}
 	
-	public ArrayList<NotiItem> getNotiItems() {
+	synchronized public ArrayList<NotiItem> getNotiItems() {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
 		ArrayList<NotiItem> items = new ArrayList<NotiItem>();
 		String table = DBHelper.CreateDB._TABLENAME;
 		String[] columns = {DBHelper.CreateDB._ID, DBHelper.CreateDB.TITLE, DBHelper.CreateDB.MESSAGE, DBHelper.CreateDB.BOARD_NAME,
@@ -105,27 +101,33 @@ public class DBHelper  {
 		Cursor result = db.query(table, columns, null, null, null, null, "CHECKED ASC, _ID DESC");
 		result.moveToFirst();
 		while (!result.isAfterLast()) {
-			Log.i("", String.valueOf(result.getInt(7)));
 			items.add(new NotiItem(result.getInt(0), result.getString(1), result.getString(2), 
 					result.getString(3), result.getInt(4), result.getString(5), result.getString(6), result.getInt(7)));
 			result.moveToNext();
 		}
+		result.close();
+		db.close();
 		return items;
 		
 	}
 	
-	public void check(int _id) {
+	synchronized public void check(int _id) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(CreateDB.CHECKED, 1);
-		Log.i("", String.valueOf(_id));
 		db.update(DBHelper.CreateDB._TABLENAME, values, DBHelper.CreateDB._ID+"=? ", new String[]{String.valueOf(_id)});
+		db.close();
 	}
 	
-	public int unCheckedCount() {
+	synchronized public int unCheckedCount() {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
 		String table = DBHelper.CreateDB._TABLENAME;
 		String[] columns = {DBHelper.CreateDB.CHECKED};
 		Cursor result = db.query(table, columns, DBHelper.CreateDB.CHECKED+"=0", null, null, null, null);
-		return result.getCount();
+		int n = result.getCount();
+		result.close();
+		db.close();
+		return n;
 	}
 
 }

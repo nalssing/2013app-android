@@ -94,7 +94,7 @@ public class ArticleEndlessAdapter extends EndlessAdapter{
 		}
 		else {
 			if (status == 401) {
-				SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+				SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 				returning = NetworkManager.INSTANCE.login(
 						preference.getString("username", ""), 
 						preference.getString("password", ""));

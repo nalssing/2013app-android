@@ -198,7 +198,13 @@ public enum NetworkManager {
 			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
 			https.disconnect();
 		} catch (Exception e) {
-			returning = new NetworkReturning(500, null);
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				returning = new NetworkReturning(500, null);
+			}
+
 			if (https != null)
 				https.disconnect();
 		}
@@ -337,7 +343,7 @@ public enum NetworkManager {
 		}
 		return returning;
 	}
-	
+
 	public NetworkReturning getSiteSuggestion()
 	{
 		URL url = null;

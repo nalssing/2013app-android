@@ -101,10 +101,8 @@ public class NotiFragment extends ListFragment{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				DBHelper helper = new DBHelper(NotiFragment.this.getActivity());
-				helper.open();
-				helper.check(item.getID());
-				helper.close();
+				DBHelper.INSTANCE.initialize(NotiFragment.this.getActivity());
+				DBHelper.INSTANCE.check(item.getID());
 			}
 		}).start();
 	}
@@ -113,11 +111,10 @@ public class NotiFragment extends ListFragment{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final DBHelper helper = new DBHelper(NotiFragment.this.getActivity());
-				helper.open();
+				DBHelper.INSTANCE.initialize(NotiFragment.this.getActivity());
 				adapter.getList().clear();
-				adapter.getList().addAll(helper.getNotiItems());
-				final int count = helper.unCheckedCount();
+				adapter.getList().addAll(DBHelper.INSTANCE.getNotiItems());
+				final int count = DBHelper.INSTANCE.unCheckedCount();
 				try {
 					NotiFragment.this.getView().post(new Runnable() {
 						@Override
@@ -129,11 +126,9 @@ public class NotiFragment extends ListFragment{
 					});
 				}
 				catch (Exception e){
-					Log.w(Values.INSTANCE.tag, e.toString());
+					e.printStackTrace();
+					//Log.w(Values.INSTANCE.tag, e.toString());
 				}
-				
-				
-				helper.close();
 			}
 		}).start();
 	}
