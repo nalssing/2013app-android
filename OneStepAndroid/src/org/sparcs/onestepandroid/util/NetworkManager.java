@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.LinkedList;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -402,6 +403,155 @@ public enum NetworkManager {
 				https.disconnect();
 		}
 		Log.i("manager", "getSiteSuggestion : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public NetworkReturning getVoteSurveyList() {
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/survey/ListSurvey")
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
+			https.disconnect();
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		Log.i("manager", "getVoteSurveyList : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public NetworkReturning getSurvey(int id) {
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/survey/GetSurvey")
+					.append("?id=")
+					.append(URLEncoder.encode(Integer.toString(id), "UTF-8"))
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
+			https.disconnect();
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		Log.i("manager", "getSurvey : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public NetworkReturning SubmitSurvey(LinkedList<Integer> number, int id, LinkedList<String> answersheet)
+	{
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/survey/DoSurvey")
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.addRequestProperty("Cookie", cookie);
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setDoOutput(true);
+			https.setDoInput(true);
+			https.setChunkedStreamingMode(0);
+			https.setRequestMethod("POST");
+			OutputStream out = new BufferedOutputStream(https.getOutputStream());
+			builder = new StringBuilder();
+			
+			builder.append("id=").append(id);
+			
+			int len = number.size();
+			for (int i=0;i<len;i++)
+			{
+				builder
+				.append("&answer")
+				.append(number.get(i))
+				.append("=")
+				.append(URLEncoder.encode(answersheet.get(i), "UTF-8"));
+			}
+
+			String param = builder.toString();
+			Log.i("input",param);
+			out.write(param.getBytes());
+			out.flush();
+
+			returning = new NetworkReturning(https.getResponseCode(), "");
+			Log.i("on SubmitSurvey", Integer.toString(returning.getStatus()));
+			
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			Log.i("on SubmitSurvey",builder.toString());
+			https.disconnect();
+			
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
 		return returning;
 	}
 }

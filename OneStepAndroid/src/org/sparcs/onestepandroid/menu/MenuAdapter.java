@@ -8,6 +8,8 @@ import org.sparcs.onestepandroid.article.ArticleReadFragment;
 import org.sparcs.onestepandroid.calendar.CalendarFragment;
 import org.sparcs.onestepandroid.home.HomeFragment;
 import org.sparcs.onestepandroid.noticeBoard.NoticeTabMenuFragment;
+import org.sparcs.onestepandroid.sitesuggestion.SiteSuggestionListFragment;
+import org.sparcs.onestepandroid.votesurvey.VoteSurveyMainFragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -215,6 +217,24 @@ public class MenuAdapter extends ArrayAdapter<MyMenu> implements OnItemClickList
 					.replace(R.id.content_frame, new CalendarFragment())
 					.commit();
 					mainActivity.setTitle("일정");
+					selected=tag;
+				}
+				else if (tag.equals("link"))
+				{
+					manager
+					.beginTransaction()
+					.replace(R.id.content_frame, new SiteSuggestionListFragment())
+					.commit();
+					mainActivity.setTitle("주요사이트 링크");
+					selected=tag;
+				}
+				else if (tag.equals("vote"))
+				{
+					manager
+					.beginTransaction()
+					.replace(R.id.content_frame, new VoteSurveyMainFragment())
+					.commit();
+					mainActivity.setTitle("Vote/Survey");
 					selected=tag;
 				}
 

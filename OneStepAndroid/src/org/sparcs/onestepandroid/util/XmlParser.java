@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.sparcs.onestepandroid.article.ArticleInfo;
 import org.sparcs.onestepandroid.article.ArticleListInfo;
 import org.sparcs.onestepandroid.sitesuggestion.SiteSuggestionInfo;
+import org.sparcs.onestepandroid.votesurvey.VoteSurveyFormFragment;
+import org.sparcs.onestepandroid.votesurvey.VoteSurveyMainItem;
+import org.sparcs.onestepandroid.votesurvey.VoteSurveyQuestion;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -185,22 +190,26 @@ public class XmlParser {
 		try {
 			parser.setInput(new ByteArrayInputStream(input.getBytes()), null);
 			int eventType = parser.getEventType();
-			SiteSuggestionInfo info;
-			while((eventType = parser.next()) != XmlPullParser.END_DOCUMENT)
+			SiteSuggestionInfo item;
+			while(eventType != XmlPullParser.END_DOCUMENT)
 			{
-				info = new SiteSuggestionInfo();
 				if (eventType == XmlPullParser.START_TAG && parser.getName().equals("site"))
 				{
-					while (!((eventType = parser.next()) == XmlPullParser.END_TAG && parser.getName().equals("site")))
+					item = new SiteSuggestionInfo();
+					while ( eventType != XmlPullParser.END_TAG || !parser.getName().equals("site"))
+					{
 						if (eventType == XmlPullParser.START_TAG)
 						{
-							if(parser.getName().equals("name"))
-								info.setName(parser.nextText());
-							if(parser.getName().equals("url"))
-								info.setUrl(parser.nextText());
+							if (parser.getName().equals("name"))
+								item.setName(parser.nextText());
+							if (parser.getName().equals("url"))
+								item.setUrl(parser.nextText());
 						}
+						eventType = parser.next();
+					}
+					list.add(item);
 				}
-				list.add(info);
+				eventType = parser.next();
 			}
 
 		}
@@ -210,6 +219,108 @@ public class XmlParser {
 			return null;
 		}
 		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return list;
+	}
+	
+	public ArrayList<VoteSurveyMainItem> parseVoteSurveyMainItem(String input) {
+		ArrayList<VoteSurveyMainItem> list = new ArrayList<VoteSurveyMainItem>();
+		try {
+
+			parser.setInput(new ByteArrayInputStream(input.getBytes()), null);
+			int eventType = parser.getEventType();
+			VoteSurveyMainItem item;
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				if(eventType == XmlPullParser.START_TAG && parser.getName().equals("survey")) {
+					item = new VoteSurveyMainItem();
+					eventType = parser.next();
+					while (eventType != XmlPullParser.END_TAG || !parser.getName().equals("survey")) {
+						if(eventType == XmlPullParser.START_TAG) {
+							if(parser.getName().equals("id"))
+								item.setId(Integer.parseInt(parser.nextText()));
+							if(parser.getName().equals("title"))
+								item.setTitle(parser.nextText());
+							if(parser.getName().equals("done"))
+								item.setIs_done(Boolean.parseBoolean(parser.nextText()));
+							if(parser.getName().equals("is_closed"))
+								item.setIs_closed(Boolean.parseBoolean(parser.nextText()));
+							if(parser.getName().equals("type"))
+								item.setType(parser.nextText());
+							if(parser.getName().equals("create_time")) {
+								String timeStamp = parser.nextText();
+								Calendar calendar = Calendar.getInstance();
+								calendar.setTimeZone(TimeZone.getDefault());
+								calendar.setTimeInMillis(Long.parseLong(timeStamp));
+								SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+								item.setCreate_time(formatter.format(calendar.getTime()));
+							}
+							if(parser.getName().equals("expire_time")) {
+								String timeStamp = parser.nextText();
+								Calendar calendar = Calendar.getInstance();
+								calendar.setTimeZone(TimeZone.getDefault());
+								calendar.setTimeInMillis(Long.parseLong(timeStamp));
+								SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+								item.setExpire_time(formatter.format(calendar.getTime()));
+							}
+						}
+						eventType = parser.next();
+					}
+					list.add(item);
+				}
+				eventType = parser.next();
+			}
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return list;
+	}
+	
+	public List<VoteSurveyQuestion> parseVoteSurveyForm(String input) {
+		List<VoteSurveyQuestion> list = new LinkedList<VoteSurveyQuestion>();
+		try {
+			parser.setInput(new ByteArrayInputStream(input.getBytes()), null);
+			int eventType = parser.getEventType();
+			VoteSurveyQuestion item;
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				if(eventType == XmlPullParser.START_TAG && parser.getName().equals("text")) {
+					item = new VoteSurveyQuestion();
+					item.setTitle(parser.getAttributeValue(null, "title"));
+					item.setIs_essay(true);
+					list.add(item);
+				}
+				if(eventType == XmlPullParser.START_TAG && parser.getName().equals("multiple_choice")) {
+					item = new VoteSurveyQuestion();
+					item.setIs_essay(false);
+					item.setTitle(parser.getAttributeValue(null, "title"));
+					item.setMax(Integer.parseInt(parser.getAttributeValue(null, "min")));
+					item.setMin(Integer.parseInt(parser.getAttributeValue(null, "max")));
+					item.setChoices(new LinkedList<String>());
+					eventType = parser.next();
+					while (eventType != XmlPullParser.END_TAG || !parser.getName().equals("multiple_choice")) {
+						if(eventType == XmlPullParser.START_TAG) {
+							if(parser.getName().equals("multiple_choice_item"))
+								item.getChoices().add(parser.nextText());
+						}
+						eventType = parser.next();
+					}
+					list.add(item);
+				}
+				eventType = parser.next();
+			}
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
