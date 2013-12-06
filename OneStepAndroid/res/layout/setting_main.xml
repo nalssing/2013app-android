@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/setting_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="설정"
+        android:textColor="#c4c4c4"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    
+	<TextView
+	    android:id="@+id/setting_bar"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/setting_header"
+        android:layout_height="1.5dp"
+        android:background="#999999" />
+
+    <Switch
+        android:id="@+id/setting_push_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/setting_bar"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:switchTextAppearance="@style/SwitchTextAppearance"
+        android:text="@string/setting_push_board"
+        android:textOff="OFF"
+        android:textOn="ON"
+         />
+    
+	<TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/setting_push_board"
+        android:layout_height="1dp"
+        android:background="#cccccc" />
+    
+    <Switch
+        android:id="@+id/setting_push_calender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/setting_push_board"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:switchTextAppearance="@style/SwitchTextAppearance"
+        android:text="@string/setting_push_calender"
+        android:textOff="OFF"
+        android:textOn="ON" />
+    
+	<TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/setting_push_calender"
+        android:layout_height="1dp"
+        android:background="#cccccc" />
+    <!-- 
+    <Switch
+        android:id="@+id/setting_push_qanda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/setting_push_calender"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:switchTextAppearance="@style/SwitchTextAppearance"
+        android:text="@string/setting_push_qanda"
+        android:textOff="OFF"
+        android:textOn="ON" />
+    
+	<TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/setting_push_qanda"
+        android:layout_height="1dp"
+        android:background="#cccccc" />
+     -->
+	<Switch
+        android:id="@+id/setting_push_vote_survey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/setting_push_calender"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:switchTextAppearance="@style/SwitchTextAppearance"
+        android:text="@string/setting_push_vote_survey"
+        android:textOff="OFF"
+        android:textOn="ON" />
+	
+	<TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/setting_push_vote_survey"
+        android:layout_height="1dp"
+        android:background="#cccccc" />
+
+</RelativeLayout>

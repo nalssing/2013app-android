@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vote_survey_form"
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <ProgressBar
-        android:id="@+id/vote_survety_form_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+	android:layout_height="wrap_content" >
 
-</LinearLayout>
+	<LinearLayout
+	    android:id="@+id/vote_survey_form"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    
+	    <TextView
+	        android:id="@+id/vote_survey_form_title"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="14sp" />
+	    
+	    <TextView
+	        android:id="@+id/vote_survey_form_type"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dp"
+	        android:textSize="12sp"
+	        android:textColor="#c4c4c4" />
+	    
+	    <ImageView 
+	        android:src="@drawable/schedule_section_divider"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" />
+	    
+	    <LinearLayout
+	        android:id="@+id/vote_survey_form_loading"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" >
+	
+	        <ProgressBar
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content">
+	        </ProgressBar>
+	
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical"
+	            android:text="Loading..."
+	            android:textSize="15sp" />
+	
+	    </LinearLayout>
+	</LinearLayout>
+
+</ScrollView>

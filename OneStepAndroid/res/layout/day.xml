@@ -3,16 +3,28 @@
     android:id="@+id/day_cell_ll_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="45dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
      
     <TextView
         android:id="@+id/day_cell_tv_day"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="2dp"
         android:paddingTop="1dp"
+        android:paddingBottom="1dp"
         android:gravity="center"
         android:textSize="15sp"
         android:textStyle="bold" />
+    
+    <ImageView
+        android:id="@+id/day_cell_tv_has_event"
+        android:src="@drawable/schedule_icon_category_blue"
+        android:layout_marginLeft="1dp"
+        android:layout_width="3dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+    />
 
 </LinearLayout>

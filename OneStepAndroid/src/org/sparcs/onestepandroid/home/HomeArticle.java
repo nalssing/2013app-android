@@ -1,24 +1,33 @@
 package org.sparcs.onestepandroid.home;
 
 public class HomeArticle {
+	
 	public static enum Type {
 		SECTION_HEADER,
 		SINGLE_LINE,
-		SECONDARY_LINE
+		POLICY_LINE,
+		NOTICE_LINE,
+		EVENT_LINE
 	}
 	private Type type;
 	private String title;
 	private String time;
 	private String writer;
 	private int hit;
+	private int articleid;
+	
 	public HomeArticle(Type type, String title, String time, String writer,
-			int hit) {
+			int hit, int id) {
 		super();
 		this.type = type;
 		this.title = title;
 		this.time = time;
 		this.writer = writer;
 		this.hit = hit;
+		this.articleid = id;
+	}
+	public int getArticleid() {
+		return articleid;
 	}
 	public Type getType() {
 		return type;

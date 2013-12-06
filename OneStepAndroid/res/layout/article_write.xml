@@ -2,31 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#fdfdfd" >
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
         android:background="@drawable/section_header"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/article_write_section_header"
-            android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:textSize="15dp"
-            android:layout_gravity="center_vertical"
-           
+            android:textColor="#c4c4c4"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="section header label" />
+            android:layout_centerVertical="true"
+            android:text="@string/policy_write_header"
+             />
 
         <ImageView
             android:id="@+id/article_write_icon_upload"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
             android:padding="0dp"
             android:src="@drawable/upload" />
 
@@ -34,19 +38,25 @@
     
     <EditText
         android:id="@+id/article_write_title"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/section_header"
+        android:background="#ffffff"
         android:layout_gravity="center_vertical"
         android:hint="Title"
-        android:layout_margin="5dp"
+        android:textSize="15sp"
+        android:layout_margin="10dp"
         />
+    
+	<TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="#bbbbbb"
+	        android:text="TextView" />
     
     <EditText
         android:id="@+id/article_write_contents"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/section_header"
         android:hint="Content"
         android:layout_margin="5dp"
         />

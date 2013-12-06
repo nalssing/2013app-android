@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    
+	    <ImageView 
+	        android:src="@drawable/about"
+	        android:layout_width="match_parent"
+	        android:layout_height="60dp"
+	        />
+	    
+	    <TextView
+	        android:text="@string/about_step_one"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="15dp" />
+	    
+	    <ImageView 
+	        android:src="@drawable/chart"
+	        android:layout_width="match_parent"
+	        android:layout_height="200dp" />
+	   
+	</LinearLayout>
+
+</ScrollView>

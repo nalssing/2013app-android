@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <!-- Top Bar Layout -->
+
+    <LinearLayout
+        android:id="@+id/policy_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/policy_top_bar_tab1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/top_bar_notice_tab_selector"
+                android:gravity="center"
+                android:text="BEST"
+                android:textColor="#505050"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/policy_top_bar_tab2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/top_bar_notice_tab_selector"
+                android:gravity="center"
+                android:text="검토중"
+                android:textColor="#505050"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/policy_top_bar_tab3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/top_bar_notice_tab_selector"
+                android:gravity="center"
+                android:text="진행중"
+                android:textColor="#505050"
+                android:textSize="15sp" />
+            
+            <Button
+                android:id="@+id/policy_top_bar_tab4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/top_bar_notice_tab_selector"
+                android:gravity="center"
+                android:text="제안보기"
+                android:textColor="#505050"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/policy_fragment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/policy_tab" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/policy_tab"
+        android:background="@drawable/content_top_shadow"
+         >
+    </FrameLayout>
+
+</RelativeLayout>

@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class VoteSurveyMainFragment extends Fragment {
 	private View view;
@@ -32,7 +31,9 @@ public class VoteSurveyMainFragment extends Fragment {
 	final Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			ProgressBar bar = (ProgressBar) view.findViewById(R.id.vote_survey_main_progressbar);
-			list.setAdapter(new VoteSurveyMainListAdapter(getActivity(),data));
+			Log.i("data size:", Integer.toString(data.size()));
+			VoteSurveyMainListAdapter adapter = new VoteSurveyMainListAdapter(getActivity(),data);
+			list.setAdapter(adapter);
 			bar.setVisibility(View.GONE);
 			list.setVisibility(View.VISIBLE);
 		};
@@ -44,6 +45,7 @@ public class VoteSurveyMainFragment extends Fragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 		view = inflater.inflate(R.layout.vote_survey_main, null);
 		list = (ListView)view.findViewById(R.id.vote_survey_main_list);
+		Log.i("survey main",Integer.toString(getFragmentManager().getBackStackEntryCount()));
 		
 		list.setClickable(true);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -54,26 +56,26 @@ public class VoteSurveyMainFragment extends Fragment {
 				{
 					Bundle args = new Bundle();
 					args.putInt("id", item.getId());
+					args.putString("title", item.getTitle());
+					args.putString("type", item.getType());
 					VoteSurveyFormFragment fragment = new VoteSurveyFormFragment();
 					fragment.setArguments(args);
 					FragmentManager manager = getFragmentManager();
-					for (int i=0; i < manager.getBackStackEntryCount(); i++) {
-						manager.popBackStack();
-					}
+					manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 					if (getActivity() != null && getActivity().findViewById(R.id.content_frame) != null) {
 						manager
 						.beginTransaction()
 						.replace(R.id.content_frame, fragment, "survey")
 						//.add(R.id.content_frame, fragment, "survey")
-						.addToBackStack(null)
+						.addToBackStack("survey")
 						.commit();
 					}
 				}
 				else
 				{
 					AlertDialog.Builder alertDlg = new AlertDialog.Builder(getActivity()) ;   
-					alertDlg.setTitle("Survey aleady done") ;
-					alertDlg.setMessage("Survey aleady done") ;   
+					alertDlg.setTitle(item.getType()+" aleady done") ;
+					alertDlg.setMessage(item.getType()+" aleady done") ;   
 					alertDlg.setPositiveButton("´Ý±â", new DialogInterface.OnClickListener() {
 					 public void onClick(DialogInterface dialog, int whichButton) {
 						 dialog.dismiss();
@@ -119,7 +121,7 @@ public class VoteSurveyMainFragment extends Fragment {
 			}
 		});
 		thread.start();
-		
+				
 		return view;
 	}
 

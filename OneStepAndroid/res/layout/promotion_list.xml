@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:layout_width="match_parent"
+	android:layout_height="wrap_content" >
+	<LinearLayout 
+	    android:id="@+id/promotion_list"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    
+	    <TextView
+	        android:text="@string/promotion_progress"
+	        android:textStyle="bold"
+	        android:textSize="18sp"
+	        android:textColor="#c4c4c4"
+	        android:paddingLeft="10dp"
+	        android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/section_header" />
+	    
+	    <ImageView
+	        android:id="@+id/promotion_main_image"
+	        android:src="@drawable/project_default_image"
+	        android:layout_height="wrap_content"
+	        android:layout_width="match_parent"
+	        android:adjustViewBounds="true" />
+	    
+	        
+	        <RelativeLayout 
+				android:layout_width="match_parent"
+				android:layout_weight="1"
+        		android:layout_height="wrap_content"
+        		android:layout_marginTop="10dp"
+        		android:layout_marginBottom="10dp" >
+        		
+		        <TextView 
+		            android:id="@+id/promotion_main_subject"
+		            android:layout_height="wrap_content"
+		            android:layout_width="150dp"
+		            android:layout_alignParentLeft="true"
+		            android:layout_marginLeft="15dp"
+		            android:paddingRight="5dp"
+		            android:gravity="center_vertical"
+		            android:text="subject"
+		            android:layout_centerVertical="true" />
+        		
+		        <TextView 
+		            android:id="@+id/promotion_main_progress_description"
+		            android:layout_height="wrap_content"
+		            android:layout_width="wrap_content"
+		            android:layout_alignParentRight="true"
+		            android:layout_marginRight="15dp"
+		            android:textSize="11sp"
+		            
+		            android:text="0% done" />
+		        
+		        <ProgressBar
+		            android:id="@+id/promotion_main_progressbar"
+		            style="?android:attr/progressBarStyleHorizontal"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_alignParentRight="true"
+		            android:layout_below="@+id/promotion_main_progress_description"
+		            android:layout_marginRight="15dp"
+		            android:max="100"
+		            android:minHeight="10dp"
+		            android:minWidth="150dp"
+		            android:progress="50" />
+		    </RelativeLayout>
+	        
+	    <ImageView 
+	        android:src="@drawable/vote_survey_checkbox_corner"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"/>
+	    
+	    <LinearLayout
+	        android:id="@+id/promotion_content"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" />
+	    
+	    
+	    <ImageView 
+	      android:src="@drawable/vote_survey_checkbox_corner"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"/>
+			    
+	    <View
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:background="@drawable/section_header"/>
+	    
+	    <TextView
+	        android:text="@string/promotion_list"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textSize="18sp"
+	        android:textStyle="bold"
+	        android:textColor="#c4c4c4"
+	        android:paddingLeft="10dp"
+	        android:gravity="center_vertical"
+	        android:background="@drawable/section_header" />
+	    <!-- <TextView
+	        android:id="@+id/promotion_main_content"
+	        android:text="content"
+	        android:layout_height="wrap_content"
+	        android:layout_width="match_parent"
+	        android:padding="10dp"
+	        android:layout_marginLeft="10dp" />   -->
+	        
+	    <LinearLayout
+	        android:id="@+id/promotion_list"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" />
+	</LinearLayout>
+</ScrollView>

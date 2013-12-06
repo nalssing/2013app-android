@@ -69,8 +69,97 @@
         android:paddingTop="@dimen/menu_tb_padding"
         android:layout_width="match_parent"
         android:text="textview"
+        android:padding="8dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/devider2"
         android:textSize="@dimen/text_size_2" />
+    
+<!--     <TextView 
+        android:id="@+id/article_read_like_button"
+        android:text="LIKE BUTTON"
+        android:textColor="#c4c4c4"
+        android:background="@drawable/like_button_border"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        /> -->
+        
+        <ImageView 
+            android:id="@+id/article_read_like_button"
+            android:src="@drawable/like"
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:layout_margin="10dp"
+	        android:layout_below="@+id/content"
+	        android:layout_centerHorizontal="true"
+        />
+    
+    <TextView
+        android:id="@+id/devider3"
+        android:layout_below="@+id/article_read_like_button"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bbbbbb"
+        android:text="TextView" />
+    
+	<RelativeLayout
+	    android:id="@+id/article_reply_section"
+	    android:layout_width="match_parent"
+	    android:layout_height="32dp"
+	    android:layout_below="@+id/devider3"
+	    android:background="#e5e5e5" >
+		
+		<ImageView 
+		    android:id="@+id/policy_suggestion_reply_button"
+		    android:src="@drawable/write"
+		    android:layout_alignParentRight="true"
+		    android:padding="5dp"
+		    android:layout_marginRight="10dp"
+		    android:layout_centerVertical="true"
+		    android:layout_width="30dp"
+		    android:layout_height="30dp"/>
+
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_centerVertical="true"
+		    android:layout_marginLeft="15dp"
+		    android:gravity="center_vertical"
+		    android:text="reply"
+		    android:textSize="14sp" />
+
+	</RelativeLayout>
+	
+	<TextView
+        android:id="@+id/devider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/article_reply_section"
+        android:background="#bbbbbb"
+        android:text="TextView" />
+	
+	<EditText
+	    android:id="@+id/article_write_reply"
+	    android:visibility="gone"
+	    android:layout_below="@+id/devider4"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="10dp"
+	    android:padding="5dp"
+	    android:background="@drawable/like_button_border" />
+	
+	<TextView
+	    android:id="@+id/article_send_reply_button"
+	    android:visibility="gone"
+	    android:text="확인"
+	    android:layout_below="@+id/article_write_reply"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignRight="@+id/article_write_reply" />
 
 </RelativeLayout>
+ 

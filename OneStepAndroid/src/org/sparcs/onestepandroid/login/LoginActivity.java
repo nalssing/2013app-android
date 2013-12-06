@@ -22,6 +22,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,8 +130,32 @@ public class LoginActivity extends Activity {
 						if (Thread.interrupted()) {
 							return;
 						}
-						else if(responseStatus == 401) {
-							msg.arg1 = 1;
+						else if(responseStatus == 500) {
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								Log.e("login", e.toString());
+							}
+							returning =
+									NetworkManager.INSTANCE.login(idTv.getText().toString(), pwTv.getText().toString());
+							msg = loginHandler.obtainMessage();
+							responseStatus = returning.getStatus();
+						}
+						
+						if(responseStatus == 500) {
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								Log.e("login", e.toString());
+							}
+							returning =
+									NetworkManager.INSTANCE.login(idTv.getText().toString(), pwTv.getText().toString());
+							msg = loginHandler.obtainMessage();
+							responseStatus = returning.getStatus();
+						}
+						
+						if(responseStatus == 401) {
+								msg.arg1 = 1;
 						}
 						else if(responseStatus == 200) {
 							msg.arg1 = 2;

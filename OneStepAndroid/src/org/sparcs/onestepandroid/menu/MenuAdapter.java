@@ -4,17 +4,27 @@ import java.util.ArrayList;
 
 import org.sparcs.onestepandroid.MainActivity;
 import org.sparcs.onestepandroid.R;
+import org.sparcs.onestepandroid.about.AboutFragment;
 import org.sparcs.onestepandroid.article.ArticleReadFragment;
 import org.sparcs.onestepandroid.calendar.CalendarFragment;
 import org.sparcs.onestepandroid.home.HomeFragment;
 import org.sparcs.onestepandroid.noticeBoard.NoticeTabMenuFragment;
+import org.sparcs.onestepandroid.noticeBoard.PolicyTabMenuFragment;
+import org.sparcs.onestepandroid.policysuggestion.PolicyReadFragment;
+import org.sparcs.onestepandroid.policysuggestion.PolicyWriteFragment;
+import org.sparcs.onestepandroid.promotion.PromotionFragment;
+import org.sparcs.onestepandroid.setting.SettingFragment;
 import org.sparcs.onestepandroid.sitesuggestion.SiteSuggestionListFragment;
+import org.sparcs.onestepandroid.votesurvey.VoteSurveyFormFragment;
 import org.sparcs.onestepandroid.votesurvey.VoteSurveyMainFragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,6 +159,24 @@ public class MenuAdapter extends ArrayAdapter<MyMenu> implements OnItemClickList
 					manager.beginTransaction().remove(article).commit();
 					manager.popBackStack();
 				}
+				PolicyReadFragment rp = (PolicyReadFragment) manager.findFragmentByTag("readpolicy");
+				if ( rp!=null)
+				{
+					manager.beginTransaction().remove(rp).commit();
+					manager.popBackStack();
+				}
+				PolicyWriteFragment wp = (PolicyWriteFragment) manager.findFragmentByTag("writepolicy");
+				if ( wp !=null)
+				{
+					manager.beginTransaction().remove(wp).commit();
+					manager.popBackStack();
+				}
+				VoteSurveyFormFragment vp = (VoteSurveyFormFragment) manager.findFragmentByTag("survey");
+				if ( vp !=null)
+				{
+					manager.beginTransaction().remove(vp).commit();
+					manager.popBackStack();
+				}
 
 
 				if (tag.equals("home")){
@@ -236,6 +264,112 @@ public class MenuAdapter extends ArrayAdapter<MyMenu> implements OnItemClickList
 					.commit();
 					mainActivity.setTitle("Vote/Survey");
 					selected=tag;
+				}
+				else if (tag.equals("promotion"))
+				{
+					manager
+					.beginTransaction()
+					.replace(R.id.content_frame, new PromotionFragment())
+					.commit();
+					mainActivity.setTitle("사업 홍보");
+					selected=tag;
+				}
+				else if (tag.startsWith("suggestion"))
+				{
+					Log.i("제안정책 메뉴",tag.substring(11));
+					PolicyTabMenuFragment fragment;
+					try {
+						fragment= (PolicyTabMenuFragment) manager.findFragmentById(R.id.content_frame);
+					}
+					catch (Exception e){
+						fragment = null;
+					}
+					if (selected.equals("suggestion") && fragment != null) {
+						if (tag.equals("suggestion/main")) {
+							fragment.goToTab(1, null, 0);
+						}
+						else if (tag.equals("suggestion/best")) {
+							fragment.goToTab(1, null, 0);
+						}
+						else if (tag.equals("suggestion/exam")) {
+							fragment.goToTab(2, null, 0);
+						}
+						else if (tag.equals("suggestion/proc")) {
+							fragment.goToTab(3, null, 0);
+						}
+						else if (tag.equals("suggestion/all")) {
+							fragment.goToTab(4, null, 0);
+						}
+					}
+					else {
+						Bundle bundle;
+						fragment = PolicyTabMenuFragment.newInstance(context);
+						bundle = new Bundle();
+						fragment.setArguments(bundle);
+						fragment.initialize(context);
+						if (tag.equals("suggestion/main")) {
+							bundle = fragment.getArguments();
+							bundle.putInt("position", 1);
+//							bundle.putString("boardname", "best");
+						}
+						else if (tag.equals("suggestion/best")) {
+							bundle = fragment.getArguments();
+							bundle.putInt("position", 1);
+//							bundle.putString("boardname", "best");
+						}
+						else if (tag.equals("suggestion/exam")) {
+							bundle = fragment.getArguments();
+							bundle.putInt("position", 2);
+//							bundle.putString("boardname", "exam");
+						}
+						else if (tag.equals("suggestion/proc")) {
+							bundle = fragment.getArguments();
+							bundle.putInt("position", 3);
+//							bundle.putString("boardname", "proc");
+						}
+						else if (tag.equals("suggestion/all")) {
+							bundle = fragment.getArguments();
+							bundle.putInt("position", 4);
+//							bundle.putString("boardname", "all");
+						}
+						manager
+						.beginTransaction()
+						.replace(R.id.content_frame, fragment)
+						.commit();
+					}
+					mainActivity.setTitle("학우제안정책");
+					selected = tag;
+				}
+				else if (tag.equals("setting"))
+				{
+					manager
+					.beginTransaction()
+					.replace(R.id.content_frame, new SettingFragment())
+					.commit();
+					mainActivity.setTitle("설정");
+					selected=tag;
+				}
+				else if(tag.equals("about"))
+				{
+					manager
+					.beginTransaction()
+					.replace(R.id.content_frame, new AboutFragment())
+					.commit();
+					mainActivity.setTitle("총학생회 소개");
+					selected=tag;
+				}
+				else if(tag.equals("q&a"))
+				{
+					AlertDialog.Builder alert = new AlertDialog.Builder(context);
+					alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+					    @Override
+					    public void onClick(DialogInterface dialog, int which) {
+					    dialog.dismiss();     //닫기
+					    }
+					});
+					alert.setTitle("아직 준비중입니다.");
+					alert.setMessage("");
+					alert.show();
 				}
 
 			}

@@ -29,13 +29,21 @@ public class ArticleReadFragment extends ListFragment {
 	private View view;
 	private static ArrayList<ArticleInfo> articlelist;
 	private static ArticleReadAdapter adapter;
+	private String board;
+	
 	private static class SetContentHandler extends Handler
 	{
 		private static String s;
+		private int articleid;
+		private View view;
+		private boolean isNotice;
 		private final WeakReference<ArticleReadFragment> me;
 
-		public SetContentHandler(ArticleReadFragment me) {
+		public SetContentHandler(ArticleReadFragment me, int pid, View view, boolean isNotice) {
 			this.me= new WeakReference<ArticleReadFragment>(me);
+			this.articleid = pid;
+			this.view = view;
+			this.isNotice = isNotice;
 		}
 
 		@Override
@@ -61,7 +69,7 @@ public class ArticleReadFragment extends ListFragment {
 			{
 				me.get().view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
 				me.get().view.findViewById(android.R.id.list).setVisibility(View.VISIBLE);
-				adapter = new ArticleReadAdapter(me.get().getActivity(), articlelist);
+				adapter = new ArticleReadAdapter(me.get().getActivity(), articlelist, articleid, view, me.get(),isNotice);
 				me.get().setListAdapter(adapter);
 				
 			}
@@ -72,6 +80,8 @@ public class ArticleReadFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
 	{
 		view = inflater.inflate(R.layout.article_read, container, false);
+		this.
+		board = this.getArguments().getString("boardname");
 		return view;
 	}
 	
@@ -93,7 +103,7 @@ public class ArticleReadFragment extends ListFragment {
 		super.onResume();
 		final int articleid = this.getArguments().getInt("articleid");
 		final String boardname = this.getArguments().getString("boardname");
-		final SetContentHandler handler = new SetContentHandler(ArticleReadFragment.this);
+		final SetContentHandler handler = new SetContentHandler(ArticleReadFragment.this,articleid,view,boardname!=null);
 		Runnable runnable = new Runnable()
 		{
 			@Override

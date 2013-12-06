@@ -4,12 +4,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ArticleListInfo implements Parcelable{
+
+	public int getVoteUp() {
+		return voteUp;
+	}
+	public void setVoteUp(int voteUp) {
+		this.voteUp = voteUp;
+	}
 	private String title;
 	private String writer;
 	private String time;
 	private int hit;
 	private int id;
 	private boolean isEndNoti;
+	private int numReply;
+	private int voteUp;
 
 	public ArticleListInfo() {
 		this.title = "";
@@ -18,9 +27,11 @@ public class ArticleListInfo implements Parcelable{
 		this.hit = 0;
 		this.id = 0;
 		this.isEndNoti = true;
+		this.numReply = 0;
+		this.voteUp = 0;
 	}
 	public ArticleListInfo(int id, String title, String writer, String time, int hit,
-			boolean isEndNoti) {
+			boolean isEndNoti, int numReply, int voteUp) {
 		super();
 		this.title = title;
 		this.writer = writer;
@@ -28,6 +39,8 @@ public class ArticleListInfo implements Parcelable{
 		this.hit = hit;
 		this.id = id;
 		this.isEndNoti = isEndNoti;
+		this.numReply = numReply;
+		this.voteUp = voteUp;
 	}
 	public ArticleListInfo(int id, String title, String writer, String time, int hit) {
 		super();
@@ -37,6 +50,7 @@ public class ArticleListInfo implements Parcelable{
 		this.hit = hit;
 		this.id = id;
 		this.isEndNoti = false;
+		this.numReply = 0;
 	}
 	public ArticleListInfo(Parcel in) {
 		this.title = in.readString();
@@ -47,6 +61,7 @@ public class ArticleListInfo implements Parcelable{
 		boolean[] a = new boolean[1];
 		in.readBooleanArray(a);
 		this.isEndNoti = a[0];
+		this.numReply = in.readInt();
 
 	}
 	public int getId() {
@@ -85,6 +100,13 @@ public class ArticleListInfo implements Parcelable{
 	public void setHit(int hit) {
 		this.hit = hit;
 	}
+	public int getNumReply() {
+		return numReply;
+	}
+	public void setNumReply(int numReply) {
+		this.numReply = numReply;
+	}
+	
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -99,6 +121,7 @@ public class ArticleListInfo implements Parcelable{
 		out.writeInt(hit);
 		out.writeInt(id);
 		out.writeBooleanArray(new boolean[] {isEndNoti});
+		out.writeInt(numReply);
 
 
 	}

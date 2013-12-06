@@ -2,22 +2,27 @@ package org.sparcs.onestepandroid.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.sparcs.onestepandroid.article.ArticleInfo;
 import org.sparcs.onestepandroid.article.ArticleListInfo;
+import org.sparcs.onestepandroid.calendar.EventInfo;
 import org.sparcs.onestepandroid.sitesuggestion.SiteSuggestionInfo;
-import org.sparcs.onestepandroid.votesurvey.VoteSurveyFormFragment;
 import org.sparcs.onestepandroid.votesurvey.VoteSurveyMainItem;
 import org.sparcs.onestepandroid.votesurvey.VoteSurveyQuestion;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.util.Log;
 
 public class XmlParser {
 	XmlPullParser parser = null;
@@ -63,6 +68,10 @@ public class XmlParser {
 							}
 							if(parser.getName().equals("read_count"))
 								info.setHit(Integer.parseInt(parser.nextText()));
+							if(parser.getName().equals("reply"))
+								info.setNumReply(Integer.parseInt(parser.nextText()));
+							if(parser.getName().equals("vote_up"))
+								info.setVoteUp(Integer.parseInt(parser.nextText()));
 						}
 						eventType = parser.next();
 					}
@@ -229,7 +238,6 @@ public class XmlParser {
 	public ArrayList<VoteSurveyMainItem> parseVoteSurveyMainItem(String input) {
 		ArrayList<VoteSurveyMainItem> list = new ArrayList<VoteSurveyMainItem>();
 		try {
-
 			parser.setInput(new ByteArrayInputStream(input.getBytes()), null);
 			int eventType = parser.getEventType();
 			VoteSurveyMainItem item;
@@ -301,8 +309,8 @@ public class XmlParser {
 					item = new VoteSurveyQuestion();
 					item.setIs_essay(false);
 					item.setTitle(parser.getAttributeValue(null, "title"));
-					item.setMax(Integer.parseInt(parser.getAttributeValue(null, "min")));
-					item.setMin(Integer.parseInt(parser.getAttributeValue(null, "max")));
+					item.setMax(Integer.parseInt(parser.getAttributeValue(null, "max")));
+					item.setMin(Integer.parseInt(parser.getAttributeValue(null, "min")));
 					item.setChoices(new LinkedList<String>());
 					eventType = parser.next();
 					while (eventType != XmlPullParser.END_TAG || !parser.getName().equals("multiple_choice")) {
@@ -327,5 +335,75 @@ public class XmlParser {
 		}
 		return list;
 	}
+	public List<String> parsePushStatus(String input) {
+		List<String> list = new LinkedList<String>();
+		try {
+			parser.setInput(new ByteArrayInputStream(input.getBytes()), null);
+			int eventType = parser.getEventType();
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				if(eventType == XmlPullParser.START_TAG && parser.getName().equals("block")) {
+					list.add(parser.nextText());
+				}				
+				eventType = parser.next();
+			}
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return list;
+	}
+	
+	public ArrayList<EventInfo> parseEvent(String input) {
+		ArrayList<EventInfo> list = new ArrayList<EventInfo>();
 
+		try {
+			parser.setInput(new ByteArrayInputStream(input.getBytes()), null);
+			int eventType = parser.getEventType();
+			EventInfo item;
+			while(eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG && parser.getName().equals("event"))
+				{
+					item = new EventInfo();
+					while ( eventType != XmlPullParser.END_TAG || !parser.getName().equals("event"))
+					{
+						if (eventType == XmlPullParser.START_TAG)
+						{
+							if (parser.getName().equals("title"))
+								item.setTitle(parser.nextText());
+							if (parser.getName().equals("content"))
+								item.setContent(parser.nextText());
+							if (parser.getName().equals("time"))
+							{
+								//Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S",Locale.KOREA).format(Long.parseLong(parser.nextText()));
+								Calendar cal = Calendar.getInstance();
+								cal.setTimeInMillis(Long.parseLong(parser.nextText()));
+								item.setDate(cal.getTime());
+							}
+						}
+						eventType = parser.next();
+					}
+					list.add(item);
+				}
+				eventType = parser.next();
+			}
+
+		}
+		catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return list;
+	}
 }

@@ -16,5 +16,10 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    
+    <style name="SwitchTextAppearance" parent="@android:style/TextAppearance.Holo.Small">
+    	<item name="android:textColor">#ffffff</item>
+	</style>
 
 </resources>

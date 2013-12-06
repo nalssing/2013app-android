@@ -93,14 +93,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 				PendingIntent pendingIntent = PendingIntent.getActivity(context, 6, notiIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 				
 				builder
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.ic_app_icon)
 				.setTicker("새 알림이 있습니다.")
 				.setWhen(System.currentTimeMillis())
 				.setContentText(message)
 				.setContentIntent(pendingIntent)
 				.setAutoCancel(true)
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-				.setVibrate(new long[]{100, 50, 150, 50, 200});
+				.setVibrate(new long[]{50, 500, 50, 500, 50, 500});
 				
 				DBHelper.INSTANCE.initialize(context);
 				if (type.equals("portal")) {

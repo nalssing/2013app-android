@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -22,6 +23,8 @@ import javax.net.ssl.X509TrustManager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -104,7 +107,8 @@ public enum NetworkManager {
 					.toString();
 			out.write(param.getBytes());
 			out.flush();
-
+			out.close();
+			//https.connect();
 			returning = new NetworkReturning(https.getResponseCode(), null);
 			if (returning.getStatus() == 200) {
 				preference.edit().putString("username", id).commit();
@@ -218,6 +222,7 @@ public enum NetworkManager {
 		URL url = null;
 		NetworkReturning returning;
 		HttpsURLConnection https = null;
+		Log.i("register",deviceId);
 		try {
 			StringBuilder builder = new StringBuilder();
 			String urlString = builder
@@ -243,7 +248,7 @@ public enum NetworkManager {
 					.toString();
 			out.write(param.getBytes());
 			out.flush();
-
+			out.close();
 			returning = new NetworkReturning(https.getResponseCode(), null);
 			https.disconnect();
 
@@ -259,6 +264,7 @@ public enum NetworkManager {
 			if (https != null)
 				https.disconnect();
 		}
+		preference.edit().putString("deviceId", deviceId).commit();
 		Log.i("manager", "register : " + String.valueOf(returning.getStatus()));
 		return returning;
 	}
@@ -328,6 +334,8 @@ public enum NetworkManager {
 			https.setDoOutput(true);
 			https.setChunkedStreamingMode(0);
 			https.setRequestMethod("POST");
+//			https.setRequestProperty("Content-Type",  "application/x-www-form-urlencoded");
+
 			OutputStream out = new BufferedOutputStream(https.getOutputStream());
 			builder = new StringBuilder();
 			builder
@@ -343,11 +351,13 @@ public enum NetworkManager {
 				.append(URLEncoder.encode(String.valueOf(reply), "UTF-8"));
 			if (type!=null)
 				builder
-				.append("&reply=")
+				.append("&type=")
 				.append(URLEncoder.encode(type, "UTF-8"));
 			String param = builder.toString();
+			Log.i("network manager",param);
 			out.write(param.getBytes());
-
+			out.flush();
+			out.close();
 			returning = new NetworkReturning(https.getResponseCode(), "");
 			https.disconnect();
 		} catch (Exception e) {
@@ -504,7 +514,7 @@ public enum NetworkManager {
 			https.addRequestProperty("Cookie", cookie);
 			https.setHostnameVerifier(DO_NOT_VERIFY);
 			https.setDoOutput(true);
-			https.setDoInput(true);
+//			https.setDoInput(true);
 			https.setChunkedStreamingMode(0);
 			https.setRequestMethod("POST");
 			OutputStream out = new BufferedOutputStream(https.getOutputStream());
@@ -526,18 +536,19 @@ public enum NetworkManager {
 			Log.i("input",param);
 			out.write(param.getBytes());
 			out.flush();
+			out.close();
 
 			returning = new NetworkReturning(https.getResponseCode(), "");
 			Log.i("on SubmitSurvey", Integer.toString(returning.getStatus()));
 			
-			InputStream in = new BufferedInputStream(https.getInputStream());
-			byte[] buffer = new byte[4096];
-			builder = new StringBuilder();
-			int n;
-			while ((n = in.read(buffer)) != -1) {
-				builder.append(new String(buffer, 0, n));
-			}
-			Log.i("on SubmitSurvey",builder.toString());
+//			InputStream in = new BufferedInputStream(https.getInputStream());
+//			byte[] buffer = new byte[4096];
+//			builder = new StringBuilder();
+//			int n;
+//			while ((n = in.read(buffer)) != -1) {
+//				builder.append(new String(buffer, 0, n));
+//			}
+//			Log.i("on SubmitSurvey",builder.toString());
 			https.disconnect();
 			
 		} catch (Exception e) {
@@ -548,6 +559,332 @@ public enum NetworkManager {
 				e.printStackTrace();
 				returning = new NetworkReturning(500, null);
 			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		return returning;
+	}
+	
+	public NetworkReturning getListPolicies(int from, int count, String board) {
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+//			StringBuilder builder = new StringBuilder();
+//			String urlString = builder
+//					.append(Values.INSTANCE.host)
+//					.append("/board/ListBoard")
+//					.toString();
+//			url = new URL(urlString);
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/board/ListArticle")
+					.append("?board=")
+					.append(URLEncoder.encode("Suggestion", "UTF-8"))
+					.append("&from=")
+					.append(URLEncoder.encode(String.valueOf(from), "UTF-8"))
+					.append("&count=")
+					.append(URLEncoder.encode(String.valueOf(count), "UTF-8"))
+					.append("&type=")
+					.append(URLEncoder.encode(board, "UTF-8"))
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
+			https.disconnect();
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		Log.i("manager", "getListPolicies : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public NetworkReturning SetPushStatus(boolean isOn, String boardname)
+	{
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/push/PushControl")
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.addRequestProperty("Cookie", cookie);
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setDoOutput(true);
+			https.setChunkedStreamingMode(0);
+			https.setRequestMethod("POST");
+			OutputStream out = new BufferedOutputStream(https.getOutputStream());
+			builder = new StringBuilder();
+			builder
+				.append("device=GOOGLE_GCM&deviceID=")
+				.append(preference.getString("deviceId",null));
+			
+			if (isOn)
+			{
+				builder.append("&unblock=");
+			}
+			else
+			{
+				builder.append("&block=");
+			}
+			builder.append(URLEncoder.encode(boardname, "UTF-8"));
+
+			String param = builder.toString();
+			Log.i("input",param);
+			out.write(param.getBytes());
+			out.flush();
+			out.close();
+
+			returning = new NetworkReturning(https.getResponseCode(), "");
+			Log.i("on SetPush", Integer.toString(returning.getStatus()));
+			https.disconnect();
+			
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		return returning;
+	}
+	
+	public NetworkReturning getPushStatus() {
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/push/PushControl")
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
+			https.disconnect();
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		Log.i("manager", "getPushStatus : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public Bitmap getImage(int filenum) {
+		URL url = null;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/dataprovider/FileProvider/")
+					.append(Integer.toString(filenum))
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			Bitmap bm = BitmapFactory.decodeStream(in);
+			https.disconnect();
+			return bm;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public NetworkReturning getPromotion() {
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/board/ListArticle")
+					.append("?board=")
+					.append(URLEncoder.encode("Promotion", "UTF-8"))
+					.append("&from=")
+					.append(URLEncoder.encode(String.valueOf(1), "UTF-8"))
+					.append("&count=")
+					.append(URLEncoder.encode(String.valueOf(20), "UTF-8"))
+					.append("&type=")
+					.append(URLEncoder.encode("Promotion", "UTF-8"))
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
+			https.disconnect();
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		Log.i("manager", "getArticle : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public NetworkReturning getMonthEvent(int sy, int sm,int sd, int ly, int lm,int ld) {
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+
+		try {
+			//String param = String.format("?from=%d-%d-01 00:00:00&to=%d-%d-%d 23:59:59",year,month,year,month,day);
+			String param = String.format(Locale.KOREAN,"?from=%d-%d-%d 00:00:00&to=%d-%d-%d 23:59:59",sy,sm,sd,ly,lm,ld);
+			param = param.replace(" ","%20");
+			Log.i("calendar",param);
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/calendar/GetEvent")
+					.append(param)
+					//.append(URLEncoder.encode(String.valueOf(from), "UTF-8"))
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setChunkedStreamingMode(0);
+			https.setDoInput(true);
+			InputStream in = new BufferedInputStream(https.getInputStream());
+			byte[] buffer = new byte[4096];
+			builder = new StringBuilder();
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				builder.append(new String(buffer, 0, n));
+			}
+			returning = new NetworkReturning(https.getResponseCode(), builder.toString());
+			https.disconnect();
+		} catch (Exception e) {
+			if (e.getMessage().contains("authentication challenge")) {
+				returning = new NetworkReturning(401, null);
+			}
+			else {
+				e.printStackTrace();
+				returning = new NetworkReturning(500, null);
+			}
+
+			if (https != null)
+				https.disconnect();
+		}
+		Log.i("manager", "getEvent : " + String.valueOf(returning.getStatus()));
+		return returning;
+	}
+	
+	public NetworkReturning SetVote(int articleid, String vote)
+	{
+		URL url = null;
+		NetworkReturning returning;
+		HttpsURLConnection https = null;
+		try {
+			StringBuilder builder = new StringBuilder();
+			String urlString = builder
+					.append(Values.INSTANCE.host)
+					.append("/board/Vote")
+					.toString();
+			url = new URL(urlString);
+			https = (HttpsURLConnection) url.openConnection();
+			https.addRequestProperty("Cookie", cookie);
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			https.setDoOutput(true);
+			https.setChunkedStreamingMode(0);
+			https.setRequestMethod("POST");
+			OutputStream out = new BufferedOutputStream(https.getOutputStream());
+			builder = new StringBuilder();
+			builder
+				.append("id=")
+				.append(Integer.toString(articleid))
+				.append("&vote=")
+				.append(URLEncoder.encode(vote, "UTF-8"));
+
+			String param = builder.toString();
+			Log.i("input",param);
+			out.write(param.getBytes());
+			out.flush();
+			out.close();
+
+			returning = new NetworkReturning(https.getResponseCode(), "");
+			Log.i("on SetPush", Integer.toString(returning.getStatus()));
+			https.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("vote",e.getMessage());
+			returning = new NetworkReturning(500, null);
+//			if (e.getMessage().contains("authentication challenge")) {
+//				returning = new NetworkReturning(401, null);
+//			}
+//			else {
+//				e.printStackTrace();
+//				returning = new NetworkReturning(500, null);
+//			}
 
 			if (https != null)
 				https.disconnect();

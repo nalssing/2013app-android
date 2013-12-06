@@ -6,15 +6,6 @@
     tools:context=".MainActivity" >
 
     <ImageView
-        android:id="@+id/login_logo_council"
-        android:layout_width="80dp"
-        android:layout_height="42dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="180dp"
-        android:layout_toLeftOf="@id/login_logo_council"
-        android:src="@drawable/login_logo_council" />
-
-    <ImageView
         android:id="@+id/login_logo_kaist"
         android:layout_width="144dp"
         android:layout_height="76dp"
@@ -68,5 +59,21 @@
         android:layout_alignTop="@+id/input_id"
         android:layout_marginLeft="10dp"
         android:src="@drawable/login_button" />
+    
+    <TextView
+        android:id="@+id/login_center"
+        android:layout_width="10dp"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/login_logo_council"
+        android:layout_width="80dp"
+        android:layout_height="42dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/login_center"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="180dp"
+        android:src="@drawable/login_logo_council" />
 
 </RelativeLayout>

@@ -85,5 +85,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/schedule_section_divider" />
+    
+    <ListView
+        android:id="@+id/calendar_event_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+    <!-- 
+    <TextView 
+        android:id="@+id/calendar_event_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"/>   -->
 
 </LinearLayout>

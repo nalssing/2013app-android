@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/section_header" >
+    
+	<TextView
+		android:text="학우제안정책"
+		android:textStyle="bold"
+		android:textSize="18sp"
+		android:textColor="#c4c4c4"
+		android:padding="10dp"
+		android:gravity="center_vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true" />
+	
+	<ImageView 
+	    android:id="@+id/policy_suggestion_write_button"
+	    android:src="@drawable/write"
+	    android:layout_alignParentRight="true"
+	    android:padding="5dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_centerVertical="true"
+	    android:layout_width="30dp"
+	    android:layout_height="30dp"/>
+
+</RelativeLayout>

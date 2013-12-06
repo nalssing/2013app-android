@@ -78,7 +78,8 @@ public class HomeAdapter extends ArrayAdapter<HomeArticle> {
 			return 0;
 		case SINGLE_LINE:
 			return 1;
-		case SECONDARY_LINE:
+		case POLICY_LINE:
+		case NOTICE_LINE:
 			return 2;
 		default:
 			return 1;
@@ -86,7 +87,7 @@ public class HomeAdapter extends ArrayAdapter<HomeArticle> {
 	}
 	@Override
 	public int getViewTypeCount() {
-		return 3;
+		return 4;
 	}
 
 }

@@ -9,13 +9,22 @@
         android:layout_height="54dp"
         android:background="@drawable/top_bar" >
 
-        <TextView
+        <!--  <TextView
             android:id="@+id/menu_button"
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:gravity="center"
             android:text="icon1"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff" />  -->
+        
+        <ImageView
+            android:id="@+id/menu_button"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@drawable/menu_icon"
+            android:padding="10dp"
+            android:textColor="#ffffff" /> 
+            
 
         <TextView
             android:layout_width="1px"
